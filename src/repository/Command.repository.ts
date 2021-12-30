@@ -25,7 +25,7 @@ export class CommandRepository {
     }
 
     public updateCommand(id: number, cmd: { name: string; alias: { toString: () => string; }; permissionLvl: string; params: string; lastTime: string; cooldown: number; description: string; message: string; custom: number; active: number; }) {
-        console.log(cmd.message);
+        // console.log(cmd.message);s
         return new Promise((resolve, reject) => {
             let sql = `UPDATE command SET 
                                 name = ?, 

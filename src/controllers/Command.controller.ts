@@ -29,19 +29,19 @@ export class CommandController {
     public create = async (req: Request, res: Response) => {
         const command = req['body'] as Command;
         const newCommand = await this.commandService.create(command);
-        res.send(newCommand);
+        res.send(newCommand).status(201);
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
         const command = req['body'] as Command;
         const id = req['params']['id'];
-        res.send(await this.commandService.update(Number(id), command))
+        res.send(await this.commandService.update(Number(id), command)).status(201);
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.send(await this.commandService.delete(Number(id)))
+        res.send(await this.commandService.delete(Number(id))).status(200);
     }
 
     public routes() {
