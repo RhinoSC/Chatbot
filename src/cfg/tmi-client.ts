@@ -67,7 +67,7 @@ export class TmiChat {
     public async start() {
         try {
             await this.client.connect();
-            // this.timerService.initTimers();
+            this.timerService.initTimers();
         } catch (error) {
             return false;
         }

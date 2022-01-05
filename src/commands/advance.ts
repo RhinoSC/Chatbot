@@ -1,7 +1,8 @@
 import { horaroAPI } from "../cfg/horaro-api";
 import { twitchAPI } from "../cfg/twitch-api";
+const socket = require("../cfg/socket-context").get();
 
-module.exports = async(args: any[], horarioAPI:horaroAPI, twitchAPI:twitchAPI) => {
+module.exports = async (args: any[], horarioAPI: horaroAPI, twitchAPI: twitchAPI) => {
     let text;
     let items = await horarioAPI.getRows();
     let max = items.length;
@@ -30,24 +31,37 @@ module.exports = async(args: any[], horarioAPI:horaroAPI, twitchAPI:twitchAPI) =
                     return 'No se puede retroceder más';
                 }
                 counter = horarioAPI.getCounter()
+                if (socket) {
+                    socket.emit('back')
+                }
                 break;
             }
         case '-m':
             {
                 let game = await horarioAPI.getRowByName(args.join(' ').substring(flag.length + 1));
                 counter = game!.indexs[0];
+                if (socket) {
+                    socket.emit('manualAdvance', counter)
+                }
                 break;
             }
         case '-n':
             {
                 if (horarioAPI.setCounter(parseInt(value))) {
                     counter = horarioAPI.getCounter()
+                    if (socket) {
+                        socket.emit('manualAdvance', counter)
+                    }
                 }
                 break;
             }
 
-        default:
+        default: {
+            if (socket) {
+                socket.emit('advance')
+            }
             break;
+        }
     }
 
     const columns = await horarioAPI.getColumns();

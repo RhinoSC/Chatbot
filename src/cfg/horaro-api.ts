@@ -56,7 +56,6 @@ export class horaroAPI{
     public async getRowById(id:number) {
         let response = await this.API.get(this.scheduleJson)
         if (!response.data) return;
-        // console.log(response.data.data.items[id]);
         return response.data.data.items[id];
     }
 
