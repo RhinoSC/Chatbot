@@ -6,6 +6,7 @@ import { twitchAPI } from "../cfg/twitch-api";
 import { Command } from "../models/Command";
 import { Interval } from "../models/Interval";
 import { CommandRepository } from "../repository/Command.repository";
+import { stringToBoolean } from "../utils/string-format";
 
 export class CommandService {
     private db: Database;
@@ -23,7 +24,7 @@ export class CommandService {
         return await this.CommandRepository.getCommands();
     }
 
-    public async executeCommand(command: Command, args: any[] = [], client:tmi.Client, channel:string, user:tmi.ChatUserstate | undefined, horaroAPI: horaroAPI, twitchAPI: twitchAPI, isInterval:boolean = false) {
+    public async executeCommand(command: Command, args: any[] = [], client: tmi.Client, channel: string, user: tmi.ChatUserstate | undefined, horaroAPI: horaroAPI, twitchAPI: twitchAPI, isInterval: boolean = false) {
         let text;
         try {
             let intervals = this.tmiChat.getTimerService().getIntervals();
@@ -47,15 +48,15 @@ export class CommandService {
             command.lastTime = new Date().toISOString();
             await this.CommandRepository.updateCommand(command.id, command);
             if (text) {
-                if(!isInterval){
+                if (!isInterval) {
                     client.say(channel, `@${user!.username}: ${command.message} ${text}`)
-                }else {
+                } else {
                     client.say(channel, `${command.message} ${text}`)
                 }
             } else {
-                if(!isInterval){
+                if (!isInterval) {
                     client.say(channel, `@${user!.username}: ${command.message}`)
-                }else{
+                } else {
                     client.say(channel, `${command.message}`)
                 }
             }
@@ -67,28 +68,28 @@ export class CommandService {
     public async handleCommand(client: tmi.Client, channel: string, user: tmi.ChatUserstate, message: string, self: boolean, horaroAPI: horaroAPI, twitchAPI: twitchAPI) {
         if (self || !message.startsWith(this.prefix)) return;
 
-        let isBroadcaster: string;
-        let isMod: string;
-        let isSub: string;
-        let modUp: string;
+        let isBroadcaster: boolean;
+        let isMod: boolean;
+        let isSub: boolean;
+        let modUp: boolean;
 
         if (user['badges']) {
-            isBroadcaster = user['badges'].broadcaster!;
-            isMod = user['badges'].moderator!;
-            isSub = user.badges.subscriber! || user.badges.founder!;
+            isBroadcaster = stringToBoolean(user['badges'].broadcaster!);
+            isMod = stringToBoolean(user['badges'].moderator!);
+            isSub = stringToBoolean(user.badges.subscriber! || user.badges.founder!);
             modUp = isMod || isBroadcaster;
         } else {
-            isBroadcaster = '0';
-            isMod = '0';
-            isSub = '0';
-            modUp = '0';
+            isBroadcaster = false;
+            isMod = false;
+            isSub = false;
+            modUp = false;
         }
-        let permissions: { [key: string]: string }
+        let permissions: { [key: string]: boolean }
         permissions = {
             broadUp: isBroadcaster || modUp,
             modUp: isMod || isBroadcaster,
             subUp: isSub || modUp,
-            else: 'else'
+            else: true
         }
 
         const commands = await this.CommandRepository.getCommands();
