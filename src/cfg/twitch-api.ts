@@ -5,6 +5,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 export class twitchAPI {
     private API: AxiosInstance;
     private TOKEN: string;
+    private interval: NodeJS.Timer;
 
     constructor() {
         this.TOKEN = `${process.env.AUTH_TOKEN}`;
@@ -27,6 +28,20 @@ export class twitchAPI {
         }).catch(err => {
             console.error(err);
         })
+        this.interval = setInterval(async () => {
+            this.refreshToken().then((token) => {
+                this.setAPI(axios.create({
+                    baseURL: 'https://api.twitch.tv/helix/',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Client-ID': `${process.env.CLIENT_ID}`
+                    }
+                }))
+                console.log('token actualizado');
+            }).catch(err => {
+                console.error(err);
+            })
+        }, 10800000)
     }
 
     setAPI(API: AxiosInstance) {
