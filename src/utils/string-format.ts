@@ -10,6 +10,7 @@ const toHHMMSS = function (sec_num: number): string {
 }
 
 function stringToBoolean(string: string) {
+    if (!string) return false;
     switch (string.toLowerCase().trim()) {
         case "true":
         case "yes":
