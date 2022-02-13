@@ -68,7 +68,7 @@ export class horaroAPI{
     }
 
     public getCounter() {
-        return this.counter;
+        return this.counter-1;
     }
 
     public setCounter(value:number) {

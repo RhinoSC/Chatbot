@@ -6,7 +6,7 @@ module.exports = async (args: any[], horarioAPI: horaroAPI, twitchAPI: twitchAPI
     let text;
     let items = await horarioAPI.getRows();
     let max = items.length;
-    let counter = horarioAPI.getCounter();
+    let counter = horarioAPI.getCounter()+1;
     horarioAPI.setMax(max);
 
     if (!horarioAPI.getActive()) {
@@ -30,7 +30,7 @@ module.exports = async (args: any[], horarioAPI: horaroAPI, twitchAPI: twitchAPI
                 if (!horarioAPI.setCounter(counter - 2)) {
                     return 'No se puede retroceder más';
                 }
-                counter = horarioAPI.getCounter()
+                counter = horarioAPI.getCounter()+1
                 if (socket) {
                     socket.emit('back')
                 }
@@ -48,7 +48,7 @@ module.exports = async (args: any[], horarioAPI: horaroAPI, twitchAPI: twitchAPI
         case '-n':
             {
                 if (horarioAPI.setCounter(parseInt(value))) {
-                    counter = horarioAPI.getCounter()
+                    counter = horarioAPI.getCounter()+1
                     if (socket) {
                         socket.emit('manualAdvance', counter)
                     }
