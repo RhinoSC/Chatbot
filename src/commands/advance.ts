@@ -9,7 +9,7 @@ module.exports = async (args: any[], horarioAPI: horaroAPI, twitchAPI: twitchAPI
     let counter = horarioAPI.getCounter() + 1;
     horarioAPI.setMax(max);
 
-    if (!horarioAPI.getActive()) {
+    if (!(await horarioAPI.getActive())) {
         horarioAPI.start(horarioAPI.getMax())
     };
 
@@ -70,7 +70,7 @@ module.exports = async (args: any[], horarioAPI: horaroAPI, twitchAPI: twitchAPI
 
     const twitchGameTitle = horarioAPI.formatString(row.data[columns.findIndex((column: string) => column == 'Juego')])
     const twitchGame = horarioAPI.formatString(row.data[columns.findIndex((column: string) => column == 'hiddenGame')])
-    const runners = horarioAPI.formatString(row.data[columns.findIndex((column: string) => column == 'hiddenRunner')])
+    const runners = horarioAPI.formatString(row.data[columns.findIndex((column: string) => column == 'hiddenRunners')])
 
 
     let title = `${process.env.STREAM_TITLE} ${twitchGameTitle} por ${runners}`
