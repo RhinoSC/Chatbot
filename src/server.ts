@@ -59,6 +59,7 @@ class ServerBot {
             console.log(`Server is listening ${this.app.get('port')} port.`);
         }), {
             cors: {
+                // origin: "*",
                 origin: "http://localhost:8080",
                 methods: ["GET", "POST"],
                 credentials: true
@@ -73,7 +74,7 @@ class ServerBot {
 
         // io.on('getCounter', (socket) => {
         //     console.log('holaaaa');
-            
+
         // })
         socketContext.set(io);
         this.tmi.start()
