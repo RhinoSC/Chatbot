@@ -9,7 +9,7 @@ module.exports = async(args: any[], horarioAPI:horaroAPI, twitchAPI:twitchAPI) =
     // TO DO: implementar flags
 
 
-    let row = await horarioAPI.getRowById(horarioAPI.getCounter())
+    let row = await horarioAPI.getRowById(horarioAPI.getCounter()-1)
     let column = await horarioAPI.getColumnByName('Runner/s');
     text = row.data[column]
 
