@@ -1,5 +1,5 @@
 import sqlite3, { Database } from 'sqlite3';
-import sqlTables from './tables'
+// import sqlTables from './tables'
 
 export class DB {
     private db: Database;
@@ -13,17 +13,17 @@ export class DB {
             }
             console.log('Connected to SQlite database.');
 
-            this.existsTable('command').then((exists: boolean | any) => {
-                this.createCmdTable(exists)
-            }).catch(err => {
-                this.createCmdTable(true)
-            })
+            // this.existsTable('command').then((exists: boolean | any) => {
+            //     this.createCmdTable(exists)
+            // }).catch(err => {
+            //     this.createCmdTable(true)
+            // })
 
-            this.existsTable('timer').then((exists: boolean | any) => {
-                this.createTimerTable(exists)
-            }).catch(err => {
-                this.createTimerTable(true)
-            })
+            // this.existsTable('timer').then((exists: boolean | any) => {
+            //     this.createTimerTable(exists)
+            // }).catch(err => {
+            //     this.createTimerTable(true)
+            // })
         });
     }
 
@@ -52,31 +52,17 @@ export class DB {
     }
 
     private createCmdTable(exists: boolean) {
-        let sql = sqlTables.tables.commands
+        // let sql = sqlTables.tables.commands
 
-        this.db.serialize(() => {
-            this.db.run(sql, (err) => {
-                if (err) {
-                    console.error(err.message);
-                }
-            })
-            if (!exists)
-                sqlTables.insertCmdData(this.db)
-        })
-    }
-
-    private createTimerTable(exists: boolean) {
-        let sql = sqlTables.tables.timer
-
-        this.db.serialize(() => {
-            this.db.run(sql, (err) => {
-                if (err) {
-                    console.error(err.message);
-                }
-            })
-            if (!exists)
-                sqlTables.insertTimerData(this.db)
-        })
+        // this.db.serialize(() => {
+        //     this.db.run(sql, (err) => {
+        //         if (err) {
+        //             console.error(err.message);
+        //         }
+        //     })
+        //     if (!exists)
+        //         sqlTables.insertCmdData(this.db)
+        // })
     }
 
     public async existsTable(table: string) {
@@ -101,6 +87,7 @@ export class DB {
             })
         })
     }
+
 }
 
 
