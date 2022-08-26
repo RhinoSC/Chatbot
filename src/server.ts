@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 import { Server } from "socket.io";
 import socketContext from './cfg/socket-context';
 
-import { DB } from './cfg/db';
+import { DB } from './cfg/db/db';
 import { horaroAPI } from './cfg/horaro-api';
 import { TmiChat } from './cfg/tmi-client';
 import { twitchAPI } from './cfg/twitch-api';
