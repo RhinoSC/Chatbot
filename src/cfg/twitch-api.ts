@@ -4,79 +4,76 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export class twitchAPI {
     private API: AxiosInstance;
-    private TOKEN: string;
-    private interval: NodeJS.Timer;
+    private accessToken: string;
+    private refshToken: string;
+    // private interval: NodeJS.Timer;
 
     constructor() {
-        this.TOKEN = `${process.env.AUTH_TOKEN}`;
+        this.accessToken = `${process.env.AUTH_TOKEN}`;
+        this.refshToken = `${process.env.REFRESH_TOKEN}`;
         this.API = axios.create({
             baseURL: 'https://api.twitch.tv/helix/',
             headers: {
                 'Client-ID': `${process.env.CLIENT_ID}`
             }
         })
+    }
 
-        this.refreshToken().then((token) => {
-            this.setAPI(axios.create({
-                baseURL: 'https://api.twitch.tv/helix/',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Client-ID': `${process.env.CLIENT_ID}`
-                }
-            }))
-            console.log('token actualizado');
-        }).catch(err => {
-            console.error(err);
-        })
-        this.interval = setInterval(async () => {
-            this.refreshToken().then((token) => {
-                this.setAPI(axios.create({
-                    baseURL: 'https://api.twitch.tv/helix/',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Client-ID': `${process.env.CLIENT_ID}`
-                    }
-                }))
-                console.log('token actualizado');
-            }).catch(err => {
-                console.error(err);
-            })
-        }, 10800000)
+    async init() {
+        try {
+            let resp = await this.validateToken()
+            if (!resp) {
+                throw new Error('No response while validating token');
+            }
+        } catch (error) {
+            await this.refreshToken();
+        }
+        console.log('[Twitch] Twitch API initialized successfully');
     }
 
     setAPI(API: AxiosInstance) {
         this.API = API;
     }
 
-    public setToken(token: string) {
-        this.TOKEN = token;
-        return true;
-    }
-
-    public async generateToken() {
-        let response = await axios.post('https://id.twitch.tv/oauth2/token', {
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
-            code: process.env.CODE,
-            grant_type: 'authorization_code',
-            redirect_uri: process.env.BASE_URL
+    public async validateToken(): Promise<{
+        client_id: string; // eslint-disable-line camelcase
+        login: string;
+        scopes: string[];
+        user_id: string; // eslint-disable-line camelcase
+    }> {
+        const response = await axios.get('https://id.twitch.tv/oauth2/validate', {
+            headers: {
+                'Authorization': `Bearer ${this.accessToken}`
+            }
         })
 
-        return response.data
+        if (response.status !== 200) {
+            throw new Error(JSON.stringify(response.data));
+            // Do we need to retry here?
+        }
+        return response.data;
     }
 
     public async refreshToken() {
-        let response = await axios.post('https://id.twitch.tv/oauth2/token', {
+        console.log('[Twitch] Attempting to refresh access token');
+
+        const response = await axios.post('https://id.twitch.tv/oauth2/token', {
             grant_type: 'refresh_token',
             refresh_token: process.env.REFRESH_TOKEN,
             client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET
+            client_secret: process.env.CLIENT_SECRET,
         })
-        if (response.status == 400) {
-            return response.statusText
+
+        if (response.status !== 200) {
+            throw new Error(JSON.stringify(response.data));
         }
-        this.setToken(response.data['access_token']);
-        return response.data['access_token']
+
+        this.accessToken = response.data.access_token;
+        this.refshToken = response.data.refresh_token;
+
+        this.API.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`
+
+        console.log('[Twitch] Successfully refreshed access token');
     }
 
     public async getGame(name: string) {

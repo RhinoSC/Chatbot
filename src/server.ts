@@ -14,7 +14,7 @@ import { HoraroController } from './controllers/Horaro.controller';
 
 class ServerBot {
     private app: express.Application;
-    private DB: DB;
+    private chatDB: DB;
     private horarioAPI: horaroAPI;
     private twitchAPI: twitchAPI;
     private tmi: TmiChat;
@@ -25,13 +25,13 @@ class ServerBot {
 
     constructor() {
         this.app = express();
-        this.DB = new DB();
+        this.chatDB = new DB('./chatbot.db');
         this.horarioAPI = new horaroAPI();
         this.twitchAPI = new twitchAPI();
-        this.tmi = new TmiChat(this.DB.getDb(), this.horarioAPI, this.twitchAPI);
+        this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
 
-        this.commandController = new CommandController(this.DB.getDb(), this.tmi);
-        this.timerController = new TimerController(this.DB.getDb(), this.tmi)
+        this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
+        this.timerController = new TimerController(this.chatDB.getDb(), this.tmi)
         this.horaroController = new HoraroController();
 
         this.configuration();
@@ -53,8 +53,8 @@ class ServerBot {
         })
     }
 
-    public start() {
-
+    public async start() {
+        await this.twitchAPI.init()
         const io = new Server(this.app.listen(this.app.get('port'), () => {
             console.log(`Server is listening ${this.app.get('port')} port.`);
         }), {

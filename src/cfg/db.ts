@@ -1,21 +1,22 @@
-import sqlite3, {Database} from 'sqlite3';
+import sqlite3, { Database } from 'sqlite3';
 
 export class DB {
-    private db:Database;
-    private dbPath:string = './chatbot.db';
-    
-    constructor(){
+    private db: Database;
+    private dbPath: string;
+
+    constructor(dbPath: string) {
+        this.dbPath = dbPath
         this.db = new sqlite3.Database(this.dbPath, (err) => {
             if (err) {
                 return console.error(err.message);
             }
             console.log('Connected to SQlite database.');
-        }); 
+        });
         // this.createCmdTable()
         // this.createTimerTable()
     }
 
-    public getDb(){
+    public getDb() {
         return this.db;
     }
 
@@ -25,7 +26,7 @@ export class DB {
                 return console.error(err.message);
             }
             console.log('Connected to SQlite database.');
-        }); 
+        });
         return;
     }
 
@@ -54,14 +55,14 @@ export class DB {
             "active"    INTEGER NOT NULL,
             PRIMARY KEY("id" AUTOINCREMENT)
         );`
-    
+
         this.db.serialize(() => {
             this.db.run(sql, (err) => {
                 if (err) {
                     console.error(err.message);
                 }
             })
-    
+
             this.insertCmdData()
         })
     }
@@ -78,7 +79,7 @@ export class DB {
             "message"	TEXT,
             PRIMARY KEY("id" AUTOINCREMENT)
         );`
-    
+
         this.db.serialize(() => {
             this.db.run(sql, (err) => {
                 if (err) {
@@ -89,7 +90,7 @@ export class DB {
         })
     }
 
-    public async existsTable(table:string) {
+    public async existsTable(table: string) {
         return new Promise((resolve, reject) => {
             let sql = `SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?`;
             this.db.run(sql, [table], (err) => {
@@ -103,7 +104,7 @@ export class DB {
         })
     }
 
-    public async dropTable(name:string) {
+    public async dropTable(name: string) {
         return new Promise((resolve, reject) => {
             let sql = `DROP TABLE IF EXISTS ?`;
             this.db.run(sql, [name], (err) => {
