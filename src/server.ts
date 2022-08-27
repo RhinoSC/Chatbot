@@ -11,6 +11,7 @@ import { twitchAPI } from './cfg/twitch-api';
 import { CommandController } from './controllers/Command.controller';
 import { TimerController } from './controllers/Timer.controller';
 import { HoraroController } from './controllers/Horaro.controller';
+import { neDB } from './cfg/db/eventDb/nedb';
 
 class ServerBot {
     private app: express.Application;
@@ -18,6 +19,7 @@ class ServerBot {
     private horarioAPI: horaroAPI;
     private twitchAPI: twitchAPI;
     private tmi: TmiChat;
+    private eventDB: neDB;
 
     private commandController: CommandController;
     private timerController: TimerController;
@@ -29,6 +31,7 @@ class ServerBot {
         this.horarioAPI = new horaroAPI();
         this.twitchAPI = new twitchAPI();
         this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
+        this.eventDB = new neDB()
 
         this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
         this.timerController = new TimerController(this.chatDB.getDb(), this.tmi)
@@ -76,8 +79,32 @@ class ServerBot {
         //     console.log('holaaaa');
 
         // })
+
         socketContext.set(io);
         this.tmi.start()
+
+
+
+
+        // testing nedb
+        // let event = {
+        //     name: 'test2',
+        // }
+        // const a = await this.eventDB.addNewEvent(event)
+
+        // let b = await this.eventDB.findEventByName('test2')
+        // console.log(b)
+        // let res = await this.eventDB.deleteEvent(b[0]._id)
+
+        // [{ name: string, _id: string }]
+        // b = await this.eventDB.updateEvent(b[0]._id, event)
+        // console.log(b)
+        // this.eventDB.findEvent('esc5tDah5sDtmz2v').then((event: any) => {
+        //     console.log(event)
+        // }).catch(err => {
+        //     console.error('hola')
+        //     console.error(err)
+        // })
     }
 
 }
