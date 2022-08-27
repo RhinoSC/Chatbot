@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { Command } from "../models/Command";
+import { Command } from "../../models/Command";
 
 export class CommandRepository {
     private db: Database;

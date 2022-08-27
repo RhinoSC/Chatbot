@@ -12,6 +12,7 @@ import { CommandController } from './controllers/Command.controller';
 import { TimerController } from './controllers/Timer.controller';
 import { HoraroController } from './controllers/Horaro.controller';
 import { neDB } from './cfg/db/eventDb/nedb';
+import { EventRepository } from './repository/eventDb/event.repository';
 
 class ServerBot {
     private app: express.Application;
@@ -19,7 +20,7 @@ class ServerBot {
     private horarioAPI: horaroAPI;
     private twitchAPI: twitchAPI;
     private tmi: TmiChat;
-    private eventDB: neDB;
+    private neDB: neDB;
 
     private commandController: CommandController;
     private timerController: TimerController;
@@ -31,7 +32,7 @@ class ServerBot {
         this.horarioAPI = new horaroAPI();
         this.twitchAPI = new twitchAPI();
         this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
-        this.eventDB = new neDB()
+        this.neDB = new neDB()
 
         this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
         this.timerController = new TimerController(this.chatDB.getDb(), this.tmi)
@@ -91,6 +92,11 @@ class ServerBot {
         //     name: 'test2',
         // }
         // const a = await this.eventDB.addNewEvent(event)
+
+        // let eventRepo: EventRepository = new EventRepository(this.neDB.db.event)
+
+        // let res = await eventRepo.findEvents()
+        // console.log(res)
 
         // let b = await this.eventDB.findEventByName('test2')
         // console.log(b)

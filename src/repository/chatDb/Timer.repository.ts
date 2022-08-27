@@ -1,5 +1,5 @@
 import { Database } from "sqlite3";
-import { Timer } from "../models/Timer";
+import { Timer } from "../../models/Timer";
 
 
 export class TimerRepository {
