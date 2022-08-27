@@ -6,7 +6,7 @@ export class ScheduleRepository {
     }
 
     // schedule functions
-    public findSchedule(): Promise<any> {
+    public findSchedules(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)

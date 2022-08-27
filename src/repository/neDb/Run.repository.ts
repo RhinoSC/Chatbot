@@ -6,7 +6,7 @@ export class RunRepository {
     }
 
     // run functions
-    public findRun(): Promise<any> {
+    public findRuns(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)

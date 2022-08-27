@@ -6,7 +6,7 @@ export class DonationRepository {
     }
 
     // Donation functions
-    public findDonation(): Promise<any> {
+    public findDonations(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)

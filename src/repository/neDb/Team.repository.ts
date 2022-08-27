@@ -6,7 +6,7 @@ export class TeamRepository {
     }
 
     // Team functions
-    public findTeam(): Promise<any> {
+    public findTeams(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)

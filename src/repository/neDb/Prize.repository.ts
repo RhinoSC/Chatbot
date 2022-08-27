@@ -5,7 +5,7 @@ export class PrizeRepository {
         this.db = db;
     }
     // Prize functions
-    public findPrize(): Promise<any> {
+    public findPrizes(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.prize.find({}, (err: any, docs: any) => {
                 if (err) reject(err)

@@ -15,8 +15,13 @@ export class BidService {
         return bids;
     }
 
-    public findById = async (id: string): Promise<Bid> => {
-        const bid: Bid = await this.BidRepository.findBidById(id);
+    public findById = async (id: string): Promise<Bid[]> => {
+        const bid: Bid[] = await this.BidRepository.findBidById(id);
+        return bid;
+    }
+
+    public findByName = async (name: string): Promise<Bid[]> => {
+        const bid: Bid[] = await this.BidRepository.findBidByName(name);
         return bid;
     }
 
