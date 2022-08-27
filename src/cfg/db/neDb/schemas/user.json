@@ -18,7 +18,7 @@
             "additionalProperties": false,
             "properties": {
                 "twitch": {
-                    "type": "number"
+                    "type": "string"
                 }
             }
         }
