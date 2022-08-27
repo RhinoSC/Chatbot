@@ -11,8 +11,8 @@ import { twitchAPI } from './cfg/twitch-api';
 import { CommandController } from './controllers/Command.controller';
 import { TimerController } from './controllers/Timer.controller';
 import { HoraroController } from './controllers/Horaro.controller';
-import { neDB } from './cfg/db/eventDb/nedb';
-import { EventRepository } from './repository/eventDb/event.repository';
+import { neDB } from './cfg/db/neDb/nedb';
+// import { EventRepository } from './repository/neDb/event.repository';
 
 class ServerBot {
     private app: express.Application;

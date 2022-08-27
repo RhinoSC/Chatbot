@@ -2,7 +2,7 @@ import { Router, Response, Request } from 'express';
 import { Database } from 'sqlite3';
 import { TmiChat } from '../cfg/tmi-client';
 import { Command } from '../models/Command';
-import { CommandService } from '../services/Command.service';
+import { CommandService } from '../services/chatDb/Command.service';
 
 export class CommandController {
     public router: Router;

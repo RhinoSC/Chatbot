@@ -1,4 +1,4 @@
-export class UserRepository {
+export class PrizeRepository {
     private db: any;
 
     constructor(db: any) {

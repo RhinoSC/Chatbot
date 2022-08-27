@@ -1,10 +1,10 @@
 import tmi from 'tmi.js';
 import { Database } from "sqlite3";
-import { Interval } from "../models/Interval";
-import { TimerRepository } from "../repository/chatDb/Timer.repository";
-import { Timer } from '../models/Timer';
-import { TmiChat } from '../cfg/tmi-client';
-import { Command } from '../models/Command';
+import { Interval } from "../../models/Interval";
+import { TimerRepository } from "../../repository/chatDb/Timer.repository";
+import { Timer } from '../../models/Timer';
+import { TmiChat } from '../../cfg/tmi-client';
+import { Command } from '../../models/Command';
 
 export class TimerService {
     private db: Database;

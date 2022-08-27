@@ -1,12 +1,12 @@
-export class UserRepository {
+export class DonationRepository {
     private db: any;
 
     constructor(db: any) {
         this.db = db;
     }
 
-    // Team functions
-    public findTeam(): Promise<any> {
+    // Donation functions
+    public findDonation(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)
@@ -15,47 +15,47 @@ export class UserRepository {
         })
     }
 
-    public findTeamById(teamId: string): Promise<any> {
+    public findDonationById(donationId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.find({ _id: teamId }, (err: any, docs: any) => {
+            this.db.find({ _id: donationId }, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
         })
     }
 
-    public findTeamByName(teamName: string): Promise<any> {
+    public findDonationByName(donationName: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.find({ name: teamName }, (err: any, docs: any) => {
+            this.db.find({ name: donationName }, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
         })
     }
 
-    public addNewTeam(team: any): Promise<any> {
+    public addNewDonation(donation: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.insert(team, async (err: any, newDoc: any) => {
+            this.db.insert(donation, async (err: any, newDoc: any) => {
                 if (err) reject(err)
-                console.log('[teamDB] Added new team')
+                console.log('[donationDB] Added new donation')
                 newDoc ? resolve(newDoc) : resolve(undefined)
             })
         })
     }
-    public updateTeam(teamId: string, newTeam: any): Promise<any> {
+    public updateDonation(donationId: string, newDonation: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.update({ _id: teamId }, { $set: { ...newTeam } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
+            this.db.update({ _id: donationId }, { $set: { ...newDonation } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
                 if (err) reject(err)
-                console.log(`[teamDB] Updated team: ${teamId}, num of teams updated: ${numAffected}`)
+                console.log(`[donationDB] Updated donation: ${donationId}, num of donations updated: ${numAffected}`)
                 affectedDocuments ? resolve(affectedDocuments) : resolve(undefined)
             })
         })
     }
-    public deleteTeam(teamId: string): Promise<any> {
+    public deleteDonation(donationId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.remove({ _id: teamId }, {}, (err: any, numRemoved: any) => {
+            this.db.remove({ _id: donationId }, {}, (err: any, numRemoved: any) => {
                 if (err) reject(err)
-                console.log(`[teamDB] Removed team: ${teamId}, num of teams removed: ${numRemoved}`)
+                console.log(`[donationDB] Removed donation: ${donationId}, num of donations removed: ${numRemoved}`)
                 numRemoved > 0 ? resolve(numRemoved) : resolve(0)
             })
         })

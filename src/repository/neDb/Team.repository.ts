@@ -1,12 +1,12 @@
-export class UserRepository {
+export class TeamRepository {
     private db: any;
 
     constructor(db: any) {
         this.db = db;
     }
 
-    // Bid functions
-    public findBid(): Promise<any> {
+    // Team functions
+    public findTeam(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)
@@ -15,47 +15,47 @@ export class UserRepository {
         })
     }
 
-    public findBidById(bidId: string): Promise<any> {
+    public findTeamById(teamId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.find({ _id: bidId }, (err: any, docs: any) => {
+            this.db.find({ _id: teamId }, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
         })
     }
 
-    public findBidByName(bidName: string): Promise<any> {
+    public findTeamByName(teamName: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.find({ name: bidName }, (err: any, docs: any) => {
+            this.db.find({ name: teamName }, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
         })
     }
 
-    public addNewBid(bid: any): Promise<any> {
+    public addNewTeam(team: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.insert(bid, async (err: any, newDoc: any) => {
+            this.db.insert(team, async (err: any, newDoc: any) => {
                 if (err) reject(err)
-                console.log('[bidDB] Added new bid')
+                console.log('[teamDB] Added new team')
                 newDoc ? resolve(newDoc) : resolve(undefined)
             })
         })
     }
-    public updateBid(bidId: string, newBid: any): Promise<any> {
+    public updateTeam(teamId: string, newTeam: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.update({ _id: bidId }, { $set: { ...newBid } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
+            this.db.update({ _id: teamId }, { $set: { ...newTeam } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
                 if (err) reject(err)
-                console.log(`[bidDB] Updated bid: ${bidId}, num of bids updated: ${numAffected}`)
+                console.log(`[teamDB] Updated team: ${teamId}, num of teams updated: ${numAffected}`)
                 affectedDocuments ? resolve(affectedDocuments) : resolve(undefined)
             })
         })
     }
-    public deleteBid(bidId: string): Promise<any> {
+    public deleteTeam(teamId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.remove({ _id: bidId }, {}, (err: any, numRemoved: any) => {
+            this.db.remove({ _id: teamId }, {}, (err: any, numRemoved: any) => {
                 if (err) reject(err)
-                console.log(`[bidDB] Removed bid: ${bidId}, num of bids removed: ${numRemoved}`)
+                console.log(`[teamDB] Removed team: ${teamId}, num of teams removed: ${numRemoved}`)
                 numRemoved > 0 ? resolve(numRemoved) : resolve(0)
             })
         })
