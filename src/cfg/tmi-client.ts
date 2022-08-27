@@ -1,7 +1,7 @@
 import { Database } from 'sqlite3';
 import tmi from 'tmi.js';
-import { CommandService } from '../services/Command.service';
-import { TimerService } from '../services/Timer.service';
+import { CommandService } from '../services/chatDb/Command.service';
+import { TimerService } from '../services/chatDb/Timer.service';
 import { horaroAPI } from './horaro-api';
 import { twitchAPI } from './twitch-api';
 // const commandHandler = require('../../services/cmd/command-handler.js')

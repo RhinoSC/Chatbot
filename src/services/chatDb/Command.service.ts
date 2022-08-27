@@ -1,12 +1,12 @@
 import { Database } from "sqlite3";
 import tmi from 'tmi.js';
-import { horaroAPI } from "../cfg/horaro-api";
-import { TmiChat } from "../cfg/tmi-client";
-import { twitchAPI } from "../cfg/twitch-api";
-import { Command } from "../models/Command";
-import { Interval } from "../models/Interval";
-import { CommandRepository } from "../repository/Command.repository";
-import { stringToBoolean } from "../utils/string-format";
+import { horaroAPI } from "../../cfg/horaro-api";
+import { TmiChat } from "../../cfg/tmi-client";
+import { twitchAPI } from "../../cfg/twitch-api";
+import { Command } from "../../models/Command";
+import { Interval } from "../../models/Interval";
+import { CommandRepository } from "../../repository/chatDb/Command.repository";
+import { stringToBoolean } from "../../utils/string-format";
 
 export class CommandService {
     private db: Database;

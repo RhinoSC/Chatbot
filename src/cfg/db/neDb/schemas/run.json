@@ -1,0 +1,70 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "_id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "start": {
+            "type": "number"
+        },
+        "estimate": {
+            "type": "string"
+        },
+        "estimateS": {
+            "type": "number"
+        },
+        "teams": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "$ref": "./team.json"
+            }
+        },
+        "data": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "platform": {
+                    "type": "string"
+                },
+                "note": {
+                    "type": "string",
+                    "default": null
+                }
+            },
+            "required": [
+                "category",
+                "platform"
+            ]
+        },
+        "bids": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "bidId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "bidId"
+            ]
+        }
+    },
+    "required": [
+        "_id",
+        "name",
+        "start",
+        "estimate",
+        "estimateS",
+        "team",
+        "data"
+    ]
+}
