@@ -33,12 +33,12 @@ export class UserController {
 
     public update = async (req: Request, res: Response) => {
         const user = req['body'] as User;
-        const id = req['params']['_id'];
+        const id = req['params']['id'];
         res.send(await this.userService.update(id, user)).status(201);
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
+        const id = req['params']['id'];
         res.send(await this.userService.delete(id)).status(200);
     }
 

@@ -12,6 +12,14 @@ import { CommandController } from './controllers/chat/Command.controller';
 import { TimerController } from './controllers/chat/Timer.controller';
 import { HoraroController } from './controllers/chat/Horaro.controller';
 import { neDB } from './cfg/db/neDb/nedb';
+import { BidController } from './controllers/marathon/Bid.controller';
+import { DonationController } from './controllers/marathon/Donation.controller';
+import { EventController } from './controllers/marathon/Event.controller';
+import { PrizeController } from './controllers/marathon/Prize.controller';
+import { RunController } from './controllers/marathon/Run.controller';
+import { ScheduleController } from './controllers/marathon/Schedule.controller';
+import { TeamController } from './controllers/marathon/Team.controller';
+import { UserController } from './controllers/marathon/User.controller';
 // import { EventRepository } from './repository/neDb/event.repository';
 
 class ServerBot {
@@ -22,9 +30,23 @@ class ServerBot {
     private tmi: TmiChat;
     private neDB: neDB;
 
-    private commandController: CommandController;
-    private timerController: TimerController;
-    private horaroController: HoraroController;
+    // private commandController: CommandController;
+    // private timerController: TimerController;
+    // private horaroController: HoraroController;
+
+    private controllers: {
+        commandController: CommandController,
+        timerController: TimerController,
+        horaroController: HoraroController,
+        bidController: BidController,
+        donationController: DonationController,
+        eventController: EventController,
+        prizeController: PrizeController,
+        runController: RunController,
+        scheduleController: ScheduleController,
+        teamController: TeamController,
+        userController: UserController
+    };
 
     constructor() {
         this.app = express();
@@ -34,9 +56,27 @@ class ServerBot {
         this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
         this.neDB = new neDB()
 
-        this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
-        this.timerController = new TimerController(this.chatDB.getDb(), this.tmi)
-        this.horaroController = new HoraroController();
+
+        this.controllers = {
+            commandController: new CommandController(this.chatDB.getDb(), this.tmi),
+            timerController: new TimerController(this.chatDB.getDb(), this.tmi),
+            horaroController: new HoraroController(),
+
+            bidController: new BidController(this.neDB.db.bid),
+            donationController: new DonationController(this.neDB.db.donation),
+            eventController: new EventController(this.neDB.db.event),
+            prizeController: new PrizeController(this.neDB.db.prize),
+            runController: new RunController(this.neDB.db.run),
+            scheduleController: new ScheduleController(this.neDB.db.schedule),
+            teamController: new TeamController(this.neDB.db.team),
+            userController: new UserController(this.neDB.db.user),
+        }
+
+        // this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
+        // this.timerController = new TimerController(this.chatDB.getDb(), this.tmi)
+        // this.horaroController = new HoraroController();
+
+        //marathons
 
         this.configuration();
         this.routes();
@@ -49,9 +89,20 @@ class ServerBot {
     }
 
     public routes() {
-        this.app.use('/api/commands/', this.commandController.router);
-        this.app.use('/api/timers/', this.timerController.router);
-        this.app.use('/api/horaro/', this.horaroController.router);
+        // chatbot
+        this.app.use('/api/commands/', this.controllers.commandController.router);
+        this.app.use('/api/timers/', this.controllers.timerController.router);
+        this.app.use('/api/horaro/', this.controllers.horaroController.router);
+
+        // marathon
+        this.app.use('/api/tracker/bid/', this.controllers.bidController.router);
+        this.app.use('/api/tracker/donation/', this.controllers.donationController.router);
+        this.app.use('/api/tracker/event/', this.controllers.eventController.router);
+        this.app.use('/api/tracker/prize/', this.controllers.prizeController.router);
+        this.app.use('/api/tracker/run/', this.controllers.runController.router);
+        this.app.use('/api/tracker/schedule/', this.controllers.scheduleController.router);
+        this.app.use('/api/tracker/team/', this.controllers.teamController.router);
+        this.app.use('/api/tracker/user/', this.controllers.userController.router);
         this.app.get("/", (req: Request, res: Response) => {
             res.send('Hello world!');
         })
