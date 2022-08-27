@@ -1,5 +1,5 @@
 import { Router, Response, Request } from 'express';
-import { horaroAPI } from '../cfg/horaro-api';
+import { horaroAPI } from '../../cfg/horaro-api';
 
 export class HoraroController {
     public router: Router;

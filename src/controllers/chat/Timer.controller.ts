@@ -1,9 +1,9 @@
 import { Router, Response, Request } from 'express';
 import { Database } from 'sqlite3';
-import { TmiChat } from '../cfg/tmi-client';
-import { Timer } from '../models/Timer';
-import { CommandService } from '../services/chatDb/Command.service';
-import { TimerService } from '../services/chatDb/Timer.service';
+import { TmiChat } from '../../cfg/tmi-client';
+import { Timer } from '../../models/Timer';
+import { CommandService } from '../../services/chatDb/Command.service';
+import { TimerService } from '../../services/chatDb/Timer.service';
 
 export class TimerController {
     public router: Router;

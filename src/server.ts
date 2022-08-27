@@ -8,9 +8,9 @@ import { DB } from './cfg/db/chat/db';
 import { horaroAPI } from './cfg/horaro-api';
 import { TmiChat } from './cfg/tmi-client';
 import { twitchAPI } from './cfg/twitch-api';
-import { CommandController } from './controllers/Command.controller';
-import { TimerController } from './controllers/Timer.controller';
-import { HoraroController } from './controllers/Horaro.controller';
+import { CommandController } from './controllers/chat/Command.controller';
+import { TimerController } from './controllers/chat/Timer.controller';
+import { HoraroController } from './controllers/chat/Horaro.controller';
 import { neDB } from './cfg/db/neDb/nedb';
 // import { EventRepository } from './repository/neDb/event.repository';
 
