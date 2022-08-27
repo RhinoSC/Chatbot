@@ -1,0 +1,61 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "_id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "game": {
+            "type": "string"
+        },
+        "goal": {
+            "type": "number",
+            "default": 0
+        },
+        "current": {
+            "type": "number"
+        },
+        "description": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "bidwar",
+                "total",
+                "goal"
+            ],
+            "maxItems": 1
+        },
+        "newBids": {
+            "type": "boolean"
+        },
+        "bids": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "name": {
+                    "type": "string"
+                },
+                "current": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "required": [
+        "_id",
+        "name",
+        "game",
+        "goal",
+        "current",
+        "description",
+        "type",
+        "newBids",
+        "bids"
+    ]
+}

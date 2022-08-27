@@ -9,6 +9,7 @@ export class neDB {
         user: Datastore,
         team: Datastore,
         bid: Datastore,
+        donation: Datastore,
         prize: Datastore
     };
 
@@ -19,6 +20,7 @@ export class neDB {
         this.db.user = new Datastore({ filename: 'docs/user.db', autoload: true });
         this.db.team = new Datastore({ filename: 'docs/team.db', autoload: true });
         this.db.bid = new Datastore({ filename: 'docs/bid.db', autoload: true });
+        this.db.donation = new Datastore({ filename: 'docs/donation.db', autoload: true });
         this.db.prize = new Datastore({ filename: 'docs/prize.db', autoload: true });
     }
 
@@ -355,6 +357,62 @@ export class neDB {
             this.db.bid.remove({ _id: bidId }, {}, (err: any, numRemoved: any) => {
                 if (err) reject(err)
                 console.log(`[bidDB] Removed bid: ${bidId}, num of bids removed: ${numRemoved}`)
+                numRemoved > 0 ? resolve(numRemoved) : resolve(0)
+            })
+        })
+    }
+
+    // Donation functions
+    public findDonation(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.donation.find({}, (err: any, docs: any) => {
+                if (err) reject(err)
+                docs ? resolve(docs) : resolve(undefined)
+            })
+        })
+    }
+
+    public findDonationById(donationId: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.donation.find({ _id: donationId }, (err: any, docs: any) => {
+                if (err) reject(err)
+                docs ? resolve(docs) : resolve(undefined)
+            })
+        })
+    }
+
+    public findDonationByName(donationName: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.donation.find({ name: donationName }, (err: any, docs: any) => {
+                if (err) reject(err)
+                docs ? resolve(docs) : resolve(undefined)
+            })
+        })
+    }
+
+    public addNewDonation(donation: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.donation.insert(donation, async (err: any, newDoc: any) => {
+                if (err) reject(err)
+                console.log('[donationDB] Added new donation')
+                newDoc ? resolve(newDoc) : resolve(undefined)
+            })
+        })
+    }
+    public updateDonation(donationId: string, newDonation: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.donation.update({ _id: donationId }, { $set: { ...newDonation } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
+                if (err) reject(err)
+                console.log(`[donationDB] Updated donation: ${donationId}, num of donations updated: ${numAffected}`)
+                affectedDocuments ? resolve(affectedDocuments) : resolve(undefined)
+            })
+        })
+    }
+    public deleteDonation(donationId: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.db.donation.remove({ _id: donationId }, {}, (err: any, numRemoved: any) => {
+                if (err) reject(err)
+                console.log(`[donationDB] Removed donation: ${donationId}, num of donations removed: ${numRemoved}`)
                 numRemoved > 0 ? resolve(numRemoved) : resolve(0)
             })
         })
