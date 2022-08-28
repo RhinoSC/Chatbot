@@ -14,32 +14,32 @@ export class EventController {
 
     public index = async (req: Request, res: Response) => {
         const events = await this.eventService.find()
-        res.send(events).json();
+        res.json(events);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const event = await this.eventService.findById(id)
         console.log(event);
-        res.send(event);
+        res.json(event);
     }
 
     public create = async (req: Request, res: Response) => {
-        const event = req['body'] as Event;
+        const event = req['body'].event as Event;
         const newEvent = await this.eventService.create(event);
-        res.send(newEvent).status(201);
+        res.status(201).json(newEvent)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const event = req['body'] as Event;
-        const id = req['params']['_id'];
-        res.send(await this.eventService.update(id, event)).status(201);
+        const event = req['body'].event as Event;
+        const id = req['params']['id'];
+        res.status(201).json(await this.eventService.update(id, event));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.eventService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.eventService.delete(id));
     }
 
     public routes() {

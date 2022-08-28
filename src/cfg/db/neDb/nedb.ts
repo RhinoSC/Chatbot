@@ -15,13 +15,13 @@ export class neDB {
 
     constructor() {
         this.db.event = new Datastore({ filename: 'collections/event.db', autoload: true });
-        this.db.schedule = new Datastore({ filename: 'docs/schedule.db', autoload: true });
-        this.db.run = new Datastore({ filename: 'docs/run.db', autoload: true });
-        this.db.user = new Datastore({ filename: 'docs/user.db', autoload: true });
-        this.db.team = new Datastore({ filename: 'docs/team.db', autoload: true });
-        this.db.bid = new Datastore({ filename: 'docs/bid.db', autoload: true });
-        this.db.donation = new Datastore({ filename: 'docs/donation.db', autoload: true });
-        this.db.prize = new Datastore({ filename: 'docs/prize.db', autoload: true });
+        this.db.schedule = new Datastore({ filename: 'collections/schedule.db', autoload: true });
+        this.db.run = new Datastore({ filename: 'collections/run.db', autoload: true });
+        this.db.user = new Datastore({ filename: 'collections/user.db', autoload: true });
+        this.db.team = new Datastore({ filename: 'collections/team.db', autoload: true });
+        this.db.bid = new Datastore({ filename: 'collections/bid.db', autoload: true });
+        this.db.donation = new Datastore({ filename: 'collections/donation.db', autoload: true });
+        this.db.prize = new Datastore({ filename: 'collections/prize.db', autoload: true });
     }
 
 

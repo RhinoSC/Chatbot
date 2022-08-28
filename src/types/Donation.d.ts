@@ -7,5 +7,6 @@ export default interface Donation {
     description: string;
     toBid: boolean;
     toBidArray: [{ bidId: string }];
-    bids: [{ name: string, current: number }]
+    bids: [{ name: string, current: number }];
+    eventId: string;
 }

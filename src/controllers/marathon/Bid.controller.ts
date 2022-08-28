@@ -14,32 +14,32 @@ export class BidController {
 
     public index = async (req: Request, res: Response) => {
         const bids = await this.bidService.find()
-        res.send(bids).json();
+        res.json(bids);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const bid = await this.bidService.findById(id)
         console.log(bid);
-        res.send(bid);
+        res.json(bid);
     }
 
     public create = async (req: Request, res: Response) => {
-        const bid = req['body'] as Bid;
+        const bid = req['body'].bid as Bid;
         const newBid = await this.bidService.create(bid);
-        res.send(newBid).status(201);
+        res.status(201).json(newBid)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const bid = req['body'] as Bid;
-        const id = req['params']['_id'];
-        res.send(await this.bidService.update(id, bid)).status(201);
+        const bid = req['body'].bid as Bid;
+        const id = req['params']['id'];
+        res.status(201).json(await this.bidService.update(id, bid));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.bidService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.bidService.delete(id));
     }
 
     public routes() {

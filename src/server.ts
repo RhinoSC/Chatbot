@@ -133,7 +133,8 @@ class ServerBot {
         // })
 
         socketContext.set(io);
-        this.tmi.start()
+        
+        // this.tmi.start()
 
 
 

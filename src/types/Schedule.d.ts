@@ -5,5 +5,6 @@ export default interface Schedule {
     name: string;
     start: number;
     end: number;
-    rows: Run[]
+    rows: Run[];
+    eventId: string;
 }

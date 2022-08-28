@@ -14,32 +14,32 @@ export class TeamController {
 
     public index = async (req: Request, res: Response) => {
         const teams = await this.teamService.find()
-        res.send(teams).json();
+        res.json(teams);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const team = await this.teamService.findById(id)
         console.log(team);
-        res.send(team);
+        res.json(team);
     }
 
     public create = async (req: Request, res: Response) => {
-        const team = req['body'] as Team;
+        const team = req['body'].team as Team;
         const newTeam = await this.teamService.create(team);
-        res.send(newTeam).status(201);
+        res.status(201).json(newTeam)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const team = req['body'] as Team;
-        const id = req['params']['_id'];
-        res.send(await this.teamService.update(id, team)).status(201);
+        const team = req['body'].team as Team;
+        const id = req['params']['id'];
+        res.status(201).json(await this.teamService.update(id, team));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.teamService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.teamService.delete(id));
     }
 
     public routes() {

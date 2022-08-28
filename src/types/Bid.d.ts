@@ -9,5 +9,6 @@ export default interface Bid {
     description: string;
     type: goalType,
     newBids: boolean,
-    bids: [{ name: string, current: number }]
+    bids: [{ name: string, current: number }];
+    runId: string;
 }

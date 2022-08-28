@@ -14,32 +14,32 @@ export class UserController {
 
     public index = async (req: Request, res: Response) => {
         const users = await this.userService.find()
-        res.send(users).json();
+        res.json(users);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const user = await this.userService.findById(id)
         console.log(user);
-        res.send(user);
+        res.json(user);
     }
 
     public create = async (req: Request, res: Response) => {
-        const user = req['body'] as User;
+        const user = req['body'].user as User;
         const newUser = await this.userService.create(user);
-        res.send(newUser).status(201);
+        res.status(201).json(newUser)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const user = req['body'] as User;
+        const user = req['body'].user as User;
         const id = req['params']['id'];
-        res.send(await this.userService.update(id, user)).status(201);
+        res.status(201).json(await this.userService.update(id, user));
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.send(await this.userService.delete(id)).status(200);
+        res.status(200).json(await this.userService.delete(id));
     }
 
     public routes() {

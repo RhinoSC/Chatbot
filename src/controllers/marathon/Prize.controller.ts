@@ -14,32 +14,32 @@ export class PrizeController {
 
     public index = async (req: Request, res: Response) => {
         const prizes = await this.prizeService.find()
-        res.send(prizes).json();
+        res.json(prizes);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const prize = await this.prizeService.findById(id)
         console.log(prize);
-        res.send(prize);
+        res.json(prize);
     }
 
     public create = async (req: Request, res: Response) => {
-        const prize = req['body'] as Prize;
+        const prize = req['body'].prize as Prize;
         const newPrize = await this.prizeService.create(prize);
-        res.send(newPrize).status(201);
+        res.status(201).json(newPrize)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const prize = req['body'] as Prize;
-        const id = req['params']['_id'];
-        res.send(await this.prizeService.update(id, prize)).status(201);
+        const prize = req['body'].prize as Prize;
+        const id = req['params']['id'];
+        res.status(201).json(await this.prizeService.update(id, prize));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.prizeService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.prizeService.delete(id));
     }
 
     public routes() {

@@ -14,32 +14,32 @@ export class DonationController {
 
     public index = async (req: Request, res: Response) => {
         const donations = await this.donationService.find()
-        res.send(donations).json();
+        res.json(donations);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const donation = await this.donationService.findById(id)
         console.log(donation);
-        res.send(donation);
+        res.json(donation);
     }
 
     public create = async (req: Request, res: Response) => {
-        const donation = req['body'] as Donation;
+        const donation = req['body'].donation as Donation;
         const newDonation = await this.donationService.create(donation);
-        res.send(newDonation).status(201);
+        res.status(201).json(newDonation)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const donation = req['body'] as Donation;
-        const id = req['params']['_id'];
-        res.send(await this.donationService.update(id, donation)).status(201);
+        const donation = req['body'].donation as Donation;
+        const id = req['params']['id'];
+        res.status(201).json(await this.donationService.update(id, donation));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.donationService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.donationService.delete(id));
     }
 
     public routes() {

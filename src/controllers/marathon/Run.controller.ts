@@ -14,32 +14,32 @@ export class RunController {
 
     public index = async (req: Request, res: Response) => {
         const runs = await this.runService.find()
-        res.send(runs).json();
+        res.json(runs);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const run = await this.runService.findById(id)
         console.log(run);
-        res.send(run);
+        res.json(run);
     }
 
     public create = async (req: Request, res: Response) => {
-        const run = req['body'] as Run;
+        const run = req['body'].run as Run;
         const newRun = await this.runService.create(run);
-        res.send(newRun).status(201);
+        res.status(201).json(newRun)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const run = req['body'] as Run;
-        const id = req['params']['_id'];
-        res.send(await this.runService.update(id, run)).status(201);
+        const run = req['body'].run as Run;
+        const id = req['params']['id'];
+        res.status(201).json(await this.runService.update(id, run));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.runService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.runService.delete(id));
     }
 
     public routes() {

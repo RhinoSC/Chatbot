@@ -14,32 +14,32 @@ export class ScheduleController {
 
     public index = async (req: Request, res: Response) => {
         const schedules = await this.scheduleService.find()
-        res.send(schedules).json();
+        res.json(schedules);
     }
 
     public indexId = async (req: Request, res: Response) => {
         const id = req['params']['id'];
         const schedule = await this.scheduleService.findById(id)
         console.log(schedule);
-        res.send(schedule);
+        res.json(schedule);
     }
 
     public create = async (req: Request, res: Response) => {
-        const schedule = req['body'] as Schedule;
+        const schedule = req['body'].schedule as Schedule;
         const newSchedule = await this.scheduleService.create(schedule);
-        res.send(newSchedule).status(201);
+        res.status(201).json(newSchedule)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
-        const schedule = req['body'] as Schedule;
-        const id = req['params']['_id'];
-        res.send(await this.scheduleService.update(id, schedule)).status(201);
+        const schedule = req['body'].schedule as Schedule;
+        const id = req['params']['id'];
+        res.status(201).json(await this.scheduleService.update(id, schedule));
     }
 
     public delete = async (req: Request, res: Response) => {
-        const id = req['params']['_id'];
-        res.send(await this.scheduleService.delete(id)).status(200);
+        const id = req['params']['id'];
+        res.status(200).json(await this.scheduleService.delete(id));
     }
 
     public routes() {

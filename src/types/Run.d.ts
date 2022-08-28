@@ -6,7 +6,11 @@ export default interface Run {
     start: number;
     estimate: string;
     estimateS: number;
+    setup: number;
     teams: Team[];
-    data: { category: string, platform: string, note: string };
-    bids: [bidId: string]
+    bids: string[],
+    scheduleId: string
+    category: string;
+    platform: string;
+    note: string;
 }
