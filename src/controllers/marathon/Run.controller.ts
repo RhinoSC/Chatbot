@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { neDB } from "../../cfg/db/neDb/nedb";
 import { RunService } from "../../services/neDb/Run.service";
 import Run from "../../types/Run";
 
@@ -6,9 +7,9 @@ export class RunController {
     public router: Router;
     private runService: RunService;
 
-    constructor(db: any) {
+    constructor(neDB: neDB) {
         this.router = Router();
-        this.runService = new RunService(db);
+        this.runService = new RunService(neDB.db.run);
         this.routes();
     }
 
@@ -28,7 +29,6 @@ export class RunController {
         const run = req['body'].run as Run;
         const newRun = await this.runService.create(run);
         res.status(201).json(newRun)
-        // res.send('si');
     }
 
     public createWithInternalFieldsEmpty = async (req: Request, res: Response) => {
@@ -52,7 +52,7 @@ export class RunController {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
         this.router.post('/', this.create);
-        this.router.post('/advanced', this.create);
+        this.router.post('/advanced', this.createWithInternalFieldsEmpty);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }

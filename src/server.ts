@@ -62,14 +62,14 @@ class ServerBot {
             timerController: new TimerController(this.chatDB.getDb(), this.tmi),
             horaroController: new HoraroController(),
 
-            bidController: new BidController(this.neDB.db.bid),
-            donationController: new DonationController(this.neDB.db.donation),
-            eventController: new EventController(this.neDB.db.event),
-            prizeController: new PrizeController(this.neDB.db.prize),
-            runController: new RunController(this.neDB.db.run),
-            scheduleController: new ScheduleController(this.neDB.db.schedule),
-            teamController: new TeamController(this.neDB.db.team),
-            userController: new UserController(this.neDB.db.user),
+            bidController: new BidController(this.neDB),
+            donationController: new DonationController(this.neDB),
+            eventController: new EventController(this.neDB),
+            prizeController: new PrizeController(this.neDB),
+            runController: new RunController(this.neDB),
+            scheduleController: new ScheduleController(this.neDB),
+            teamController: new TeamController(this.neDB),
+            userController: new UserController(this.neDB),
         }
 
         // this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
