@@ -1,4 +1,3 @@
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { ScheduleRepository } from "../../repository/neDb/Schedule.repository";
 import Schedule from "../../types/Schedule";
 
@@ -6,8 +5,8 @@ export class ScheduleService {
     private db: any;
     private ScheduleRepository: ScheduleRepository;
 
-    constructor(neDB: neDB) {
-        this.db = neDB.db.schedule;
+    constructor(db: any) {
+        this.db = db;
         this.ScheduleRepository = new ScheduleRepository(this.db);
     }
 

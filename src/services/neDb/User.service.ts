@@ -1,4 +1,3 @@
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { UserRepository } from "../../repository/neDb/User.repository";
 import User from "../../types/User";
 
@@ -6,8 +5,8 @@ export class UserService {
     private db: any;
     private UserRepository: UserRepository;
 
-    constructor(neDB: neDB) {
-        this.db = neDB.db.user;
+    constructor(db: any) {
+        this.db = db;
         this.UserRepository = new UserRepository(this.db);
     }
 

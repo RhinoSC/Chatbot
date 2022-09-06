@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { EventService } from "../../services/neDb/Event.service";
 import Event from "../../types/Event";
 
@@ -7,9 +6,9 @@ export class EventController {
     public router: Router;
     private eventService: EventService;
 
-    constructor(neDB: neDB) {
+    constructor(eventService: EventService) {
         this.router = Router();
-        this.eventService = new EventService(neDB);
+        this.eventService = eventService;
         this.routes();
     }
 

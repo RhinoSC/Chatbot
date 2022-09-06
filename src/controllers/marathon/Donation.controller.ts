@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { DonationService } from "../../services/neDb/Donation.service";
 import Donation from "../../types/Donation";
 
@@ -7,9 +6,9 @@ export class DonationController {
     public router: Router;
     private donationService: DonationService;
 
-    constructor(neDB: neDB) {
+    constructor(donationService: DonationService) {
         this.router = Router();
-        this.donationService = new DonationService(neDB);
+        this.donationService = donationService;
         this.routes();
     }
 

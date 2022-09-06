@@ -1,4 +1,3 @@
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { EventRepository } from "../../repository/neDb/Event.repository";
 import Event from "../../types/Event";
 
@@ -6,8 +5,8 @@ export class EventService {
     private db: any;
     private EventRepository: EventRepository;
 
-    constructor(neDB: neDB) {
-        this.db = neDB.db.event;
+    constructor(db: any) {
+        this.db = db;
         this.EventRepository = new EventRepository(this.db);
     }
 

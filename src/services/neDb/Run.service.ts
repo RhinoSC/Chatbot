@@ -1,19 +1,17 @@
-import { neDB } from "../../cfg/db/neDb/nedb";
+import { neDBObject } from "../../cfg/db/neDb/nedb";
 import { RunRepository } from "../../repository/neDb/Run.repository";
 import Run from "../../types/Run";
 import { BidService } from "./Bid.service";
-import { TeamService } from "./Team.service";
-import { UserService } from "./User.service";
 
 export class RunService {
     private db: any;
     private RunRepository: RunRepository;
     private BidService: BidService;
 
-    constructor(neDB: neDB) {
-        this.db = neDB.db.run;
+    constructor(db: any) {
+        this.db = db;
         this.RunRepository = new RunRepository(this.db);
-        this.BidService = new BidService(neDB.db.bid)
+        this.BidService = neDBObject.services.bidService
     }
 
     public find = async (): Promise<Run[]> => {
@@ -38,9 +36,9 @@ export class RunService {
 
     public createWithInternalFieldsEmpty = async (run: Run) => {
 
-        run.bids.forEach(async (bid) => {
-            await this.BidService.create(bid)
-        })
+        // run.bids.forEach(async (bid) => {
+        //     await this.BidService.create(bid)
+        // })
 
         const newRun: Run = await this.RunRepository.addNewRun(run)
         return newRun;

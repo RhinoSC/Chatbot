@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
+import { neDB } from "../../cfg/db/neDb/nedb.interface";
 import { RunService } from "../../services/neDb/Run.service";
 import Run from "../../types/Run";
 
@@ -7,9 +7,9 @@ export class RunController {
     public router: Router;
     private runService: RunService;
 
-    constructor(neDB: neDB) {
+    constructor(runService: RunService) {
         this.router = Router();
-        this.runService = new RunService(neDB);
+        this.runService = runService;
         this.routes();
     }
 

@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { ScheduleService } from "../../services/neDb/Schedule.service";
 import Schedule from "../../types/Schedule";
 
@@ -7,9 +6,9 @@ export class ScheduleController {
     public router: Router;
     private scheduleService: ScheduleService;
 
-    constructor(neDB: neDB) {
+    constructor(scheduleService: ScheduleService) {
         this.router = Router();
-        this.scheduleService = new ScheduleService(neDB);
+        this.scheduleService = scheduleService;
         this.routes();
     }
 

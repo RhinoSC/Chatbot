@@ -11,7 +11,6 @@ import { twitchAPI } from './cfg/twitch-api';
 import { CommandController } from './controllers/chat/Command.controller';
 import { TimerController } from './controllers/chat/Timer.controller';
 import { HoraroController } from './controllers/chat/Horaro.controller';
-import { neDB } from './cfg/db/neDb/nedb';
 import { BidController } from './controllers/marathon/Bid.controller';
 import { DonationController } from './controllers/marathon/Donation.controller';
 import { EventController } from './controllers/marathon/Event.controller';
@@ -20,7 +19,8 @@ import { RunController } from './controllers/marathon/Run.controller';
 import { ScheduleController } from './controllers/marathon/Schedule.controller';
 import { TeamController } from './controllers/marathon/Team.controller';
 import { UserController } from './controllers/marathon/User.controller';
-// import { EventRepository } from './repository/neDb/event.repository';
+import { neDBObject } from './cfg/db/neDb/nedb';
+import { neDB } from './cfg/db/neDb/nedb.interface';
 
 class ServerBot {
     private app: express.Application;
@@ -29,10 +29,6 @@ class ServerBot {
     private twitchAPI: twitchAPI;
     private tmi: TmiChat;
     private neDB: neDB;
-
-    // private commandController: CommandController;
-    // private timerController: TimerController;
-    // private horaroController: HoraroController;
 
     private controllers: {
         commandController: CommandController,
@@ -54,22 +50,21 @@ class ServerBot {
         this.horarioAPI = new horaroAPI();
         this.twitchAPI = new twitchAPI();
         this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
-        this.neDB = new neDB()
-
+        this.neDB = neDBObject
 
         this.controllers = {
             commandController: new CommandController(this.chatDB.getDb(), this.tmi),
             timerController: new TimerController(this.chatDB.getDb(), this.tmi),
             horaroController: new HoraroController(),
 
-            bidController: new BidController(this.neDB),
-            donationController: new DonationController(this.neDB),
-            eventController: new EventController(this.neDB),
-            prizeController: new PrizeController(this.neDB),
-            runController: new RunController(this.neDB),
-            scheduleController: new ScheduleController(this.neDB),
-            teamController: new TeamController(this.neDB),
-            userController: new UserController(this.neDB),
+            bidController: neDBObject.controllers.bidController,
+            donationController: neDBObject.controllers.donationController,
+            eventController: neDBObject.controllers.eventController,
+            prizeController: neDBObject.controllers.prizeController,
+            runController: neDBObject.controllers.runController,
+            scheduleController: neDBObject.controllers.scheduleController,
+            teamController: neDBObject.controllers.teamController,
+            userController: neDBObject.controllers.userController,
         }
 
         // this.commandController = new CommandController(this.chatDB.getDb(), this.tmi);
@@ -133,7 +128,7 @@ class ServerBot {
         // })
 
         socketContext.set(io);
-        
+
         // this.tmi.start()
 
 

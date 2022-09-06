@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { BidService } from "../../services/neDb/Bid.service";
 import Bid from "../../types/Bid";
 
@@ -7,9 +6,9 @@ export class BidController {
     public router: Router;
     private bidService: BidService;
 
-    constructor(neDB: neDB) {
+    constructor(bidService: BidService) {
         this.router = Router();
-        this.bidService = new BidService(neDB);
+        this.bidService = bidService;
         this.routes();
     }
 

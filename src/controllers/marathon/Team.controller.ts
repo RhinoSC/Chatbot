@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { TeamService } from "../../services/neDb/Team.service";
 import Team from "../../types/Team";
 
@@ -7,9 +6,9 @@ export class TeamController {
     public router: Router;
     private teamService: TeamService;
 
-    constructor(neDB: neDB) {
+    constructor(teamService: TeamService) {
         this.router = Router();
-        this.teamService = new TeamService(neDB);
+        this.teamService = teamService;
         this.routes();
     }
 

@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { PrizeService } from "../../services/neDb/Prize.service";
 import Prize from "../../types/Prize";
 
@@ -7,9 +6,9 @@ export class PrizeController {
     public router: Router;
     private prizeService: PrizeService;
 
-    constructor(neDB: neDB) {
+    constructor(prizeService: PrizeService) {
         this.router = Router();
-        this.prizeService = new PrizeService(neDB);
+        this.prizeService = prizeService;
         this.routes();
     }
 

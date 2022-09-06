@@ -1,4 +1,3 @@
-import { neDB } from "../../cfg/db/neDb/nedb";
 import { TeamRepository } from "../../repository/neDb/Team.repository";
 import Team from "../../types/Team";
 
@@ -6,8 +5,8 @@ export class TeamService {
     private db: any;
     private TeamRepository: TeamRepository;
 
-    constructor(neDB: neDB) {
-        this.db = neDB.db.team;
+    constructor(db: any) {
+        this.db = db;
         this.TeamRepository = new TeamRepository(this.db);
     }
 
