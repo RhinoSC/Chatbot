@@ -67,6 +67,57 @@ export class RunService {
     }
 
     public update = async (id: string, run: Run) => {
+        const oldRun: Run[] = await this.RunRepository.findRunById(id)
+
+        const schedule = await this.ScheduleService.findById(run.scheduleId)
+
+        oldRun[0].teams.forEach(async (oldTeam) => {
+            const oldTeamIndex = run.teams.findIndex(team => team._id == oldTeam._id)
+            if (oldTeamIndex == -1) {
+                await this.TeamService.delete(oldTeam._id)
+            }
+        });
+
+        for (let i = 0; i < run.teams.length; i++) {
+            const newTeam = run.teams[i];
+            const oldTeamIndex = oldRun[0].teams.findIndex(team => team._id == newTeam._id)
+            if (oldTeamIndex != -1) {
+                const updatedTeam = await this.TeamService.update(newTeam._id, newTeam)
+                run.teams[i] = updatedTeam
+            } else {
+                const createdTeam = await this.TeamService.create(newTeam)
+                run.teams[i] = createdTeam
+            }
+        }
+
+
+        oldRun[0].bids.forEach(async (oldBid) => {
+            const oldBidIndex = run.bids.findIndex(bid => bid._id == oldBid._id)
+            if (oldBidIndex == -1)
+                await this.BidService.delete(oldBid._id)
+        });
+
+        for (let i = 0; i < run.bids.length; i++) {
+            const newBid = run.bids[i]
+            const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
+            if (oldBidIndex != -1) {
+                const updatedBid = await this.BidService.update(newBid._id, newBid)
+                run.bids[i] = updatedBid
+            } else {
+                const createdBid = await this.BidService.create(newBid)
+                run.bids[i] = createdBid
+            }
+        }
+
+        for (let i = 0; i < schedule[0].rows.length; i++) {
+            const oldRow = schedule[0].rows[i]
+            if (oldRow._id == id) {
+                schedule[0].rows[i] = run
+            }
+        }
+
+        await this.ScheduleService.update(run.scheduleId, schedule[0])
+
         const updateRun: Run = await this.RunRepository.updateRun(id, run)
         return updateRun;
     }
