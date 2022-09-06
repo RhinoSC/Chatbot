@@ -31,6 +31,12 @@ export class RunController {
         // res.send('si');
     }
 
+    public createWithInternalFieldsEmpty = async (req: Request, res: Response) => {
+        const run = req['body'].run as Run;
+        const newRun = await this.runService.createWithInternalFieldsEmpty(run);
+        res.status(201).json(newRun)
+    }
+
     public update = async (req: Request, res: Response) => {
         const run = req['body'].run as Run;
         const id = req['params']['id'];
@@ -46,6 +52,7 @@ export class RunController {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
         this.router.post('/', this.create);
+        this.router.post('/advanced', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }

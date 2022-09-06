@@ -1,5 +1,5 @@
 export enum goalType {
     "bidwar",
-    "total",
-    "goal"
+    "goal",
+    "total"
 };
