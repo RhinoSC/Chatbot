@@ -1,3 +1,4 @@
+import { neDB } from "../../cfg/db/neDb/nedb";
 import { PrizeRepository } from "../../repository/neDb/Prize.repository";
 import Prize from "../../types/Prize";
 
@@ -5,8 +6,8 @@ export class PrizeService {
     private db: any;
     private PrizeRepository: PrizeRepository;
 
-    constructor(db: any) {
-        this.db = db;
+    constructor(neDB: neDB) {
+        this.db = neDB.db.prize;
         this.PrizeRepository = new PrizeRepository(this.db);
     }
 

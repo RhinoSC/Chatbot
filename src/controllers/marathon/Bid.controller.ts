@@ -9,7 +9,7 @@ export class BidController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.bidService = new BidService(neDB.db.bid);
+        this.bidService = new BidService(neDB);
         this.routes();
     }
 

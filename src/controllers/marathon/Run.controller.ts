@@ -9,7 +9,7 @@ export class RunController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.runService = new RunService(neDB.db.run);
+        this.runService = new RunService(neDB);
         this.routes();
     }
 

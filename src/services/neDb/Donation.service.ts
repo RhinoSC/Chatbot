@@ -1,3 +1,4 @@
+import { neDB } from "../../cfg/db/neDb/nedb";
 import { DonationRepository } from "../../repository/neDb/Donation.repository";
 import Donation from "../../types/Donation";
 
@@ -5,8 +6,8 @@ export class DonationService {
     private db: any;
     private DonationRepository: DonationRepository;
 
-    constructor(db: any) {
-        this.db = db;
+    constructor(neDB: neDB) {
+        this.db = neDB.db.donation;
         this.DonationRepository = new DonationRepository(this.db);
     }
 

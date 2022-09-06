@@ -9,7 +9,7 @@ export class TeamController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.teamService = new TeamService(neDB.db.team);
+        this.teamService = new TeamService(neDB);
         this.routes();
     }
 

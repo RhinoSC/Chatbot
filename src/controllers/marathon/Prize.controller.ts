@@ -9,7 +9,7 @@ export class PrizeController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.prizeService = new PrizeService(neDB.db.prize);
+        this.prizeService = new PrizeService(neDB);
         this.routes();
     }
 

@@ -9,7 +9,7 @@ export class EventController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.eventService = new EventService(neDB.db.event);
+        this.eventService = new EventService(neDB);
         this.routes();
     }
 

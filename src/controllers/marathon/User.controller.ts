@@ -9,7 +9,7 @@ export class UserController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.userService = new UserService(neDB.db.user);
+        this.userService = new UserService(neDB);
         this.routes();
     }
 

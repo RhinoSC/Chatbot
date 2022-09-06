@@ -9,7 +9,7 @@ export class DonationController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.donationService = new DonationService(neDB.db.donation);
+        this.donationService = new DonationService(neDB);
         this.routes();
     }
 

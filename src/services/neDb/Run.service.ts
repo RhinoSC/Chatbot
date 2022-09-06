@@ -1,3 +1,4 @@
+import { neDB } from "../../cfg/db/neDb/nedb";
 import { RunRepository } from "../../repository/neDb/Run.repository";
 import Run from "../../types/Run";
 import { BidService } from "./Bid.service";
@@ -9,10 +10,10 @@ export class RunService {
     private RunRepository: RunRepository;
     private BidService: BidService;
 
-    constructor(db: any) {
-        this.db = db;
+    constructor(neDB: neDB) {
+        this.db = neDB.db.run;
         this.RunRepository = new RunRepository(this.db);
-        this.BidService = new BidService(this.db)
+        this.BidService = new BidService(neDB.db.bid)
     }
 
     public find = async (): Promise<Run[]> => {

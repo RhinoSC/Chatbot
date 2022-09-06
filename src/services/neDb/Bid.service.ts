@@ -1,3 +1,4 @@
+import { neDB } from "../../cfg/db/neDb/nedb";
 import { BidRepository } from "../../repository/neDb/Bid.repository";
 import Bid from "../../types/Bid"
 
@@ -5,8 +6,8 @@ export class BidService {
     private db: any;
     private BidRepository: BidRepository;
 
-    constructor(db: any) {
-        this.db = db;
+    constructor(neDB: neDB) {
+        this.db = neDB.db.bid;
         this.BidRepository = new BidRepository(this.db);
     }
 

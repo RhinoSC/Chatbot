@@ -9,7 +9,7 @@ export class ScheduleController {
 
     constructor(neDB: neDB) {
         this.router = Router();
-        this.scheduleService = new ScheduleService(neDB.db.schedule);
+        this.scheduleService = new ScheduleService(neDB);
         this.routes();
     }
 
