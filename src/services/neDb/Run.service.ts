@@ -123,6 +123,22 @@ export class RunService {
     }
 
     public delete = async (id: string) => {
+        const run: Run[] = await this.RunRepository.findRunById(id);
+        const schedule = await this.ScheduleService.findById(run[0].scheduleId)
+
+        run[0].teams.forEach(async (team) => {
+            await this.TeamService.delete(team._id)
+        });
+        run[0].bids.forEach(async (bid) => {
+            await this.BidService.delete(bid._id)
+        });
+
+        const rowIndex = schedule[0].rows.findIndex(row => row._id == run[0]._id)
+        if (rowIndex != 1)
+            schedule[0].rows.splice(rowIndex, 1)
+
+        await this.ScheduleService.update(schedule[0]._id, schedule[0])
+
         const deleteRun: any = await this.RunRepository.deleteRun(id)
         return deleteRun;
     }
