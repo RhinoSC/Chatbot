@@ -2,16 +2,22 @@ import { neDBObject } from "../../cfg/db/neDb/nedb";
 import { RunRepository } from "../../repository/neDb/Run.repository";
 import Run from "../../types/Run";
 import { BidService } from "./Bid.service";
+import { ScheduleService } from "./Schedule.service";
+import { TeamService } from "./Team.service";
 
 export class RunService {
     private db: any;
     private RunRepository: RunRepository;
     private BidService: BidService;
+    private ScheduleService: ScheduleService;
+    private TeamService: TeamService
 
     constructor(db: any) {
         this.db = db;
         this.RunRepository = new RunRepository(this.db);
         this.BidService = neDBObject.services.bidService
+        this.ScheduleService = neDBObject.services.scheduleService
+        this.TeamService = neDBObject.services.teamService
     }
 
     public find = async (): Promise<Run[]> => {
@@ -36,13 +42,28 @@ export class RunService {
 
     public createWithInternalFieldsEmpty = async (run: Run) => {
 
-        // run.bids.forEach(async (bid) => {
-        //     await this.BidService.create(bid)
-        // })
+        const schedule = await this.ScheduleService.findById(run.scheduleId)
+
+        for (let i = 0; i < run.teams.length; i++) {
+            const team = run.teams[i];
+
+            const savedTeam = await this.TeamService.create(team)
+            run.teams[i] = savedTeam
+
+        }
+
+        for (let i = 0; i < run.bids.length; i++) {
+            const bid = run.bids[i]
+            const savedBid = await this.BidService.create(bid)
+            run.bids[i] = savedBid
+        }
 
         const newRun: Run = await this.RunRepository.addNewRun(run)
+
+        schedule[0].rows.push(newRun)
+        await this.ScheduleService.update(newRun.scheduleId, schedule[0])
+
         return newRun;
-        // return true
     }
 
     public update = async (id: string, run: Run) => {
