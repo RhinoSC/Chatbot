@@ -7,7 +7,7 @@ export class PrizeRepository {
     // Prize functions
     public findPrizes(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.prize.find({}, (err: any, docs: any) => {
+            this.db.find({}, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
@@ -16,7 +16,7 @@ export class PrizeRepository {
 
     public findPrizeById(prizeId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.prize.find({ _id: prizeId }, (err: any, docs: any) => {
+            this.db.find({ _id: prizeId }, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
@@ -25,7 +25,7 @@ export class PrizeRepository {
 
     public findPrizeByName(prizeName: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.prize.find({ name: prizeName }, (err: any, docs: any) => {
+            this.db.find({ name: prizeName }, (err: any, docs: any) => {
                 if (err) reject(err)
                 docs ? resolve(docs) : resolve(undefined)
             })
@@ -34,7 +34,7 @@ export class PrizeRepository {
 
     public addNewPrize(prize: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.prize.insert(prize, async (err: any, newDoc: any) => {
+            this.db.insert(prize, async (err: any, newDoc: any) => {
                 if (err) reject(err)
                 console.log('[prizeDB] Added new prize')
                 newDoc ? resolve(newDoc) : resolve(undefined)
@@ -43,7 +43,7 @@ export class PrizeRepository {
     }
     public updatePrize(prizeId: string, newPrize: any): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.prize.update({ _id: prizeId }, { $set: { ...newPrize } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
+            this.db.update({ _id: prizeId }, { $set: { ...newPrize } }, { returnUpdatedDocs: true }, (err: any, numAffected: any, affectedDocuments: any,) => {
                 if (err) reject(err)
                 console.log(`[prizeDB] Updated prize: ${prizeId}, num of prizes updated: ${numAffected}`)
                 affectedDocuments ? resolve(affectedDocuments) : resolve(undefined)
@@ -52,7 +52,7 @@ export class PrizeRepository {
     }
     public deletePrize(prizeId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.db.prize.remove({ _id: prizeId }, {}, (err: any, numRemoved: any) => {
+            this.db.remove({ _id: prizeId }, {}, (err: any, numRemoved: any) => {
                 if (err) reject(err)
                 console.log(`[prizeDB] Removed prize: ${prizeId}, num of prizes removed: ${numRemoved}`)
                 numRemoved > 0 ? resolve(numRemoved) : resolve(0)

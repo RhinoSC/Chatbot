@@ -113,6 +113,7 @@ export class RunService {
             const oldRow = schedule[0].rows[i]
             if (oldRow._id == id) {
                 schedule[0].rows[i] = run
+                break
             }
         }
 
