@@ -1,3 +1,4 @@
+import ScheduleRow from "./ScheduleRow";
 import Run from "./Run";
 
 export default interface Schedule {
@@ -5,6 +6,8 @@ export default interface Schedule {
     name: string;
     start: number;
     end: number;
-    rows: Run[];
+    rows: ScheduleRow[];
+    availableRuns: Run[];
     eventId: string;
+    defaultSetup: number;
 }

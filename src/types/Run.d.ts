@@ -5,8 +5,8 @@ export default interface Run {
     name: string;
     gameTwitch: string;
     start: number;
-    estimate: string;
-    estimateS: number;
+    estimate: number;
+    estimateS: string;
     setup: number;
     teams: Team[];
     bids: Bid[],

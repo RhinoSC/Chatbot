@@ -60,7 +60,7 @@ export class RunService {
 
         const newRun: Run = await this.RunRepository.addNewRun(run)
 
-        schedule[0].rows.push(newRun)
+        schedule[0].availableRuns.push(newRun)
         await this.ScheduleService.update(newRun.scheduleId, schedule[0])
 
         return newRun;
@@ -112,7 +112,7 @@ export class RunService {
         for (let i = 0; i < schedule[0].rows.length; i++) {
             const oldRow = schedule[0].rows[i]
             if (oldRow._id == id) {
-                schedule[0].rows[i] = run
+                schedule[0].availableRuns[i] = run
                 break
             }
         }
