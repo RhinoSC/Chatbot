@@ -90,27 +90,36 @@ export class RunService {
             }
         }
 
+        if (oldRun[0].bids.length > 0) {
+            oldRun[0].bids.forEach(async (oldBid) => {
+                const oldBidIndex = run.bids.findIndex(bid => bid._id == oldBid._id)
+                if (oldBidIndex == -1)
+                    await this.BidService.delete(oldBid._id)
+            });
 
-        oldRun[0].bids.forEach(async (oldBid) => {
-            const oldBidIndex = run.bids.findIndex(bid => bid._id == oldBid._id)
-            if (oldBidIndex == -1)
-                await this.BidService.delete(oldBid._id)
-        });
-
-        for (let i = 0; i < run.bids.length; i++) {
-            const newBid = run.bids[i]
-            const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
-            if (oldBidIndex != -1) {
-                const updatedBid = await this.BidService.update(newBid._id, newBid)
-                run.bids[i] = updatedBid
-            } else {
-                const createdBid = await this.BidService.create(newBid)
-                run.bids[i] = createdBid
+            for (let i = 0; i < run.bids.length; i++) {
+                const newBid = run.bids[i]
+                const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
+                if (oldBidIndex != -1) {
+                    const updatedBid = await this.BidService.update(newBid._id, newBid)
+                    run.bids[i] = updatedBid
+                } else {
+                    const createdBid = await this.BidService.create(newBid)
+                    run.bids[i] = createdBid
+                }
             }
         }
 
+
         for (let i = 0; i < schedule[0].rows.length; i++) {
             const oldRow = schedule[0].rows[i]
+            if (oldRow.row._id == id) {
+                schedule[0].rows[i].row = run
+                break
+            }
+        }
+        for (let i = 0; i < schedule[0].availableRuns.length; i++) {
+            const oldRow = schedule[0].availableRuns[i]
             if (oldRow._id == id) {
                 schedule[0].availableRuns[i] = run
                 break
@@ -134,9 +143,17 @@ export class RunService {
             await this.BidService.delete(bid._id)
         });
 
-        const rowIndex = schedule[0].rows.findIndex(row => row._id == run[0]._id)
-        if (rowIndex != 1)
-            schedule[0].rows.splice(rowIndex, 1)
+        if (schedule[0].rows.length > 0) {
+            const rowIndex = schedule[0].rows.findIndex(scheduleRow => scheduleRow.row._id == run[0]._id)
+            if (rowIndex != 1)
+                schedule[0].rows.splice(rowIndex, 1)
+        }
+
+        if (schedule[0].availableRuns.length > 0) {
+            const availableRunIndex = schedule[0].availableRuns.findIndex(row => row._id == run[0]._id)
+            if (availableRunIndex != 1)
+                schedule[0].availableRuns.splice(availableRunIndex, 1)
+        }
 
         await this.ScheduleService.update(schedule[0]._id, schedule[0])
 

@@ -47,6 +47,14 @@ export class ScheduleService {
     }
 
     public delete = async (id: string) => {
+        const schedule: Schedule[] = await this.ScheduleRepository.findScheduleById(id)
+
+        const event = await this.EventService.findById(schedule[0].eventId)
+
+        event[0].schedule = undefined
+
+        await this.EventService.update(event[0]._id, event[0])
+
         const deleteSchedule: any = await this.ScheduleRepository.deleteSchedule(id)
         return deleteSchedule;
     }

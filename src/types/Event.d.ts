@@ -8,7 +8,7 @@ export default interface Event {
     start: number;
     end: number;
     TZ: {},
-    schedule: Schedule;
+    schedule?: Schedule;
     isCharity: boolean,
     allowDonations: boolean,
     donations: Donation[];
