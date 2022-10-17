@@ -71,12 +71,19 @@ export class RunService {
 
         const schedule = await this.ScheduleService.findById(run.scheduleId)
 
-        oldRun[0].teams.forEach(async (oldTeam) => {
-            const oldTeamIndex = run.teams.findIndex(team => team._id == oldTeam._id)
+        // oldRun[0].teams.forEach(async (oldTeam) => {
+        //     const oldTeamIndex = run.teams.findIndex(team => team._id == oldTeam._id)
+        //     if (oldTeamIndex == -1) {
+        //         await this.TeamService.delete(oldTeam._id)
+        //     }
+        // });
+
+        for (let i = 0; i < oldRun[0].teams.length; i++) {
+            const oldTeamIndex = run.teams.findIndex(team => team._id == oldRun[0].teams[i]._id)
             if (oldTeamIndex == -1) {
-                await this.TeamService.delete(oldTeam._id)
+                await this.TeamService.delete(oldRun[0].teams[i]._id)
             }
-        });
+        }
 
         for (let i = 0; i < run.teams.length; i++) {
             const newTeam = run.teams[i];
@@ -90,25 +97,51 @@ export class RunService {
             }
         }
 
-        if (oldRun[0].bids.length > 0) {
-            oldRun[0].bids.forEach(async (oldBid) => {
-                const oldBidIndex = run.bids.findIndex(bid => bid._id == oldBid._id)
-                if (oldBidIndex == -1)
-                    await this.BidService.delete(oldBid._id)
-            });
+        // oldRun[0].bids.forEach(async (oldBid) => {
+        //     const oldBidIndex = run.bids.findIndex(bid => bid._id == oldBid._id)
+        //     if (oldBidIndex == -1) {
+        //         await this.TeamService.delete(oldBid._id)
+        //     }
+        // });
 
-            for (let i = 0; i < run.bids.length; i++) {
-                const newBid = run.bids[i]
-                const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
-                if (oldBidIndex != -1) {
-                    const updatedBid = await this.BidService.update(newBid._id, newBid)
-                    run.bids[i] = updatedBid
-                } else {
-                    const createdBid = await this.BidService.create(newBid)
-                    run.bids[i] = createdBid
-                }
+        for (let i = 0; i < oldRun[0].bids.length; i++) {
+            const oldBidIndex = run.bids.findIndex(bid => bid._id == oldRun[0].bids[i]._id)
+            if (oldBidIndex == -1) {
+                await this.BidService.delete(oldRun[0].bids[i]._id)
             }
         }
+
+        for (let i = 0; i < run.bids.length; i++) {
+            const newBid = run.bids[i];
+            const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
+            if (oldBidIndex != -1) {
+                const updatedBid = await this.BidService.update(newBid._id, newBid)
+                run.bids[i] = updatedBid
+            } else {
+                const createdBid = await this.BidService.create(newBid)
+                run.bids[i] = createdBid
+            }
+        }
+
+        // if (oldRun[0].bids.length > 0) {
+        //     oldRun[0].bids.forEach(async (oldBid) => {
+        //         const oldBidIndex = run.bids.findIndex(bid => bid._id == oldBid._id)
+        //         if (oldBidIndex == -1)
+        //             await this.BidService.delete(oldBid._id)
+        //     });
+
+        //     for (let i = 0; i < run.bids.length; i++) {
+        //         const newBid = run.bids[i]
+        //         const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
+        //         if (oldBidIndex != -1) {
+        //             const updatedBid = await this.BidService.update(newBid._id, newBid)
+        //             run.bids[i] = updatedBid
+        //         } else {
+        //             const createdBid = await this.BidService.create(newBid)
+        //             run.bids[i] = createdBid
+        //         }
+        //     }
+        // }
 
 
         for (let i = 0; i < schedule[0].rows.length; i++) {

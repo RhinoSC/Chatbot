@@ -1,3 +1,5 @@
+import Run from "./Run";
+
 export default interface Donation {
     _id: string;
     name: string;
@@ -6,7 +8,7 @@ export default interface Donation {
     amount: number;
     description: string;
     toBid: boolean;
-    toBidArray: [{ bidId: string }];
-    bids: [{ name: string, current: number }];
+    runId: string;
+    bidId: string;
     eventId: string;
 }
