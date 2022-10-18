@@ -10,5 +10,6 @@ export default interface Donation {
     toBid: boolean;
     runId: string;
     bidId: string;
+    optionName: string;
     eventId: string;
 }
