@@ -24,6 +24,13 @@ export class EventController {
         res.json(event);
     }
 
+    public indexName = async (req: Request, res: Response) => {
+        const name = req['params']['name'];
+        const event = await this.eventService.findByName(name)
+        console.log(event);
+        res.json(event);
+    }
+
     public create = async (req: Request, res: Response) => {
         const event = req['body'].event as Event;
         const newEvent = await this.eventService.create(event);
@@ -45,6 +52,7 @@ export class EventController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
+        this.router.get('/name/:name', this.indexName);
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);

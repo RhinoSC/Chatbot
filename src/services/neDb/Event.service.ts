@@ -25,6 +25,11 @@ export class EventService {
         return event;
     }
 
+    public getIdByName = async (name: string): Promise<string> => {
+        const event: Event[] = await this.EventRepository.findEventByName(name);
+        return event[0]._id;
+    }
+
     public create = async (event: Event) => {
         const newEvent: Event = await this.EventRepository.addNewEvent(event)
         return newEvent;
