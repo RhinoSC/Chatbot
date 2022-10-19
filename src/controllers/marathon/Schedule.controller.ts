@@ -31,6 +31,13 @@ export class ScheduleController {
     public create = async (req: Request, res: Response) => {
         const schedule = req['body'].schedule as Schedule;
         const newSchedule = await this.scheduleService.create(schedule);
+
+        if (newSchedule.eventId) {
+            const event = await this.eventService.findById(newSchedule.eventId)
+            event[0].schedule = newSchedule
+            this.eventService.update(event[0]._id, event[0])
+        }
+
         res.status(201).json(newSchedule)
         // res.send('si');
     }

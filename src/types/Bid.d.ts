@@ -11,4 +11,6 @@ export default interface Bid {
     newBids: boolean,
     bids: [{ name: string, current: number }];
     openBid: boolean;
+    eventId: string;
+    runId: string;
 }

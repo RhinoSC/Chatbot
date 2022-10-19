@@ -4,7 +4,9 @@ import { RunService } from "../../services/neDb/Run.service";
 import { ScheduleService } from "../../services/neDb/Schedule.service";
 import { TeamService } from "../../services/neDb/Team.service";
 import Run from "../../types/Run";
+import Bid from "../../types/Bid";
 import Services from "../../types/Services";
+import { EventService } from "../../services/neDb/Event.service";
 
 export class RunController {
     public router: Router;
@@ -12,6 +14,7 @@ export class RunController {
     private bidService: BidService;
     private scheduleService: ScheduleService;
     private teamService: TeamService;
+    private eventService: EventService;
 
     constructor(runService: RunService, services: Services) {
         this.router = Router();
@@ -19,6 +22,7 @@ export class RunController {
         this.bidService = services.bidService
         this.scheduleService = services.scheduleService
         this.teamService = services.teamService
+        this.eventService = services.eventService
         this.routes();
     }
 
@@ -45,29 +49,78 @@ export class RunController {
 
         const schedule = await this.scheduleService.findById(run.scheduleId)
 
+        let newRun = await this.runService.create(run);
+
         for (let i = 0; i < run.teams.length; i++) {
             const team = run.teams[i];
 
+            team.eventId = schedule[0].eventId
+            team.runId = newRun._id
             const savedTeam = await this.teamService.create(team)
-            run.teams[i] = savedTeam
-
+            newRun.teams[i] = savedTeam
         }
 
         for (let i = 0; i < run.bids.length; i++) {
-            const bid = run.bids[i]
+            const bid: Bid = run.bids[i]
+
+            bid.eventId = schedule[0].eventId
+            bid.runId = newRun._id
             const savedBid = await this.bidService.create(bid)
-            run.bids[i] = savedBid
+            newRun.bids[i] = savedBid
         }
 
-        const newRun = await this.runService.create(run);
+        newRun = await this.runService.update(newRun._id, newRun)
 
         schedule[0].availableRuns.push(newRun)
-        await this.scheduleService.update(newRun.scheduleId, schedule[0])
+
+        const updatedSchedule = await this.scheduleService.update(run.scheduleId, schedule[0])
+
+        const event = await this.eventService.findById(updatedSchedule.eventId)
+        event[0].schedule = updatedSchedule
+        this.eventService.update(event[0]._id, event[0])
 
         res.status(201).json(newRun)
     }
 
     public update = async (req: Request, res: Response) => {
+        const run = req['body'].run as Run;
+        const id = req['params']['id'];
+
+        const schedule = await this.scheduleService.findById(run.scheduleId)
+
+        let founded = false
+
+        for (let i = 0; i < schedule[0].rows.length; i++) {
+            const oldRow = schedule[0].rows[i]
+            if (oldRow.row._id == id) {
+                schedule[0].rows[i].row = run
+                founded = true
+                break
+            }
+        }
+
+        if (!founded) {
+            for (let i = 0; i < schedule[0].availableRuns.length; i++) {
+                const oldRow = schedule[0].availableRuns[i]
+                if (oldRow._id == id) {
+                    schedule[0].availableRuns[i] = run
+                    break
+                }
+            }
+        }
+
+        const updatedRun = await this.runService.update(id, run)
+
+        const updatedSchedule = await this.scheduleService.update(run.scheduleId, schedule[0])
+
+        const event = await this.eventService.findById(updatedSchedule.eventId)
+        event[0].schedule = updatedSchedule
+        this.eventService.update(event[0]._id, event[0])
+
+        res.status(201).json(updatedRun);
+    }
+
+    public updateWithBidsAndTeams = async (req: Request, res: Response) => {
         const run = req['body'].run as Run;
         const id = req['params']['id'];
 
@@ -136,7 +189,11 @@ export class RunController {
 
         const updatedRun = await this.runService.update(id, run)
 
-        await this.scheduleService.update(run.scheduleId, schedule[0])
+        const updatedSchedule = await this.scheduleService.update(run.scheduleId, schedule[0])
+
+        const event = await this.eventService.findById(updatedSchedule.eventId)
+        event[0].schedule = updatedSchedule
+        this.eventService.update(event[0]._id, event[0])
 
         res.status(201).json(updatedRun);
     }
@@ -173,7 +230,11 @@ export class RunController {
             }
         }
 
-        await this.scheduleService.update(schedule[0]._id, schedule[0])
+        const updatedSchedule = await this.scheduleService.update(run[0].scheduleId, schedule[0])
+
+        const event = await this.eventService.findById(updatedSchedule.eventId)
+        event[0].schedule = updatedSchedule
+        this.eventService.update(event[0]._id, event[0])
 
         const numDeleted = await this.runService.delete(id)
 
@@ -185,6 +246,7 @@ export class RunController {
         this.router.get('/:id', this.indexId);
         this.router.post('/', this.create);
         this.router.post('/advanced', this.createWithBidsAndTeams);
+        this.router.put('/advanced/:id', this.updateWithBidsAndTeams);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }
