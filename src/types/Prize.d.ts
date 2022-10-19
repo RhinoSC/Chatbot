@@ -4,4 +4,5 @@ export default interface Prize {
     minAmount: number;
     imgUrl: string;
     eventId: string;
+    active: boolean;
 }
