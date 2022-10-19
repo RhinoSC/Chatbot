@@ -1,3 +1,4 @@
 {"name":"bid1","game":"run1","goal":1234,"current":13,"description":"asioduasodij","type":1,"newBids":false,"bids":[],"openBid":true,"_id":"Zz9MdO56xVEIbnUl"}
 {"name":"bid2","game":"run1","goal":0,"current":231.03999999999996,"description":"Otra descripcion","type":0,"newBids":true,"bids":[{"name":"Nuevo3","current":7.6},{"name":"Pablo","current":6.7},{"name":"Nuevo6","current":0},{"name":"Nuevo","current":5},{"name":"Nuevo2","current":4.5},{"name":"Pedro","current":4},{"name":"Nuevo5","current":4},{"name":"Nuevo3","current":3}],"openBid":true,"_id":"brymEOQrGfZOBLYo"}
+{"name":"bid1paraeste","game":"pruebaIncreible","goal":4321,"current":0,"description":"asdasd","type":1,"newBids":false,"bids":[],"openBid":true,"_id":"vWoErKgwvb3LE49R"}
 {"name":"bid3","game":"run1","goal":0,"current":10,"description":"asasfasf","type":0,"newBids":false,"bids":[{"name":"Amigo","current":4},{"name":"Perro","current":3}],"openBid":true,"_id":"zcCTcLJP9HoYnzOK"}

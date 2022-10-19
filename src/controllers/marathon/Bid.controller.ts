@@ -1,15 +1,22 @@
 import { Router, Request, Response } from "express";
 import { BidService } from "../../services/neDb/Bid.service";
+import { RunService } from "../../services/neDb/Run.service";
 import Bid from "../../types/Bid";
+import Services from "../../types/Services";
 
 export class BidController {
     public router: Router;
     private bidService: BidService;
 
-    constructor(bidService: BidService) {
+    // private runService: RunService
+
+    constructor(bidService: BidService, services: Services) {
         this.router = Router();
         this.bidService = bidService;
+        // this.runService = services.runService
         this.routes();
+
+        // console.log(this.runService)
     }
 
     public index = async (req: Request, res: Response) => {

@@ -1,14 +1,18 @@
 import { Router, Request, Response } from "express";
+import { EventService } from "../../services/neDb/Event.service";
 import { ScheduleService } from "../../services/neDb/Schedule.service";
 import Schedule from "../../types/Schedule";
+import Services from "../../types/Services";
 
 export class ScheduleController {
     public router: Router;
     private scheduleService: ScheduleService;
+    private eventService: EventService
 
-    constructor(scheduleService: ScheduleService) {
+    constructor(scheduleService: ScheduleService, services: Services) {
         this.router = Router();
         this.scheduleService = scheduleService;
+        this.eventService = services.eventService
         this.routes();
     }
 
@@ -34,12 +38,31 @@ export class ScheduleController {
     public update = async (req: Request, res: Response) => {
         const schedule = req['body'].schedule as Schedule;
         const id = req['params']['id'];
-        res.status(201).json(await this.scheduleService.update(id, schedule));
+
+        const updateSchedule: Schedule = await this.scheduleService.update(id, schedule)
+
+        if (updateSchedule.eventId) {
+            const event = await this.eventService.findById(updateSchedule.eventId)
+            event[0].schedule = updateSchedule
+            this.eventService.update(event[0]._id, event[0])
+        }
+
+        res.status(201).json(updateSchedule);
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.status(200).json(await this.scheduleService.delete(id));
+
+        const schedule: Schedule[] = await this.scheduleService.findById(id)
+
+        const event = await this.eventService.findById(schedule[0].eventId)
+        if (event[0]) {
+            event[0].schedule = undefined
+            await this.eventService.update(event[0]._id, event[0])
+        }
+
+        const numDeleted = await this.scheduleService.delete(id)
+        res.status(200).json({ deletedSchedule: schedule, num: numDeleted });
     }
 
     public routes() {

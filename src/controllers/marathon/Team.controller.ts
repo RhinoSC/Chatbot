@@ -1,12 +1,13 @@
 import { Router, Request, Response } from "express";
 import { TeamService } from "../../services/neDb/Team.service";
+import Services from "../../types/Services";
 import Team from "../../types/Team";
 
 export class TeamController {
     public router: Router;
     private teamService: TeamService;
 
-    constructor(teamService: TeamService) {
+    constructor(teamService: TeamService, services: Services) {
         this.router = Router();
         this.teamService = teamService;
         this.routes();

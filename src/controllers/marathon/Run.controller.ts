@@ -1,15 +1,24 @@
 import { Router, Request, Response } from "express";
-import { neDB } from "../../cfg/db/neDb/nedb.interface";
+import { BidService } from "../../services/neDb/Bid.service";
 import { RunService } from "../../services/neDb/Run.service";
+import { ScheduleService } from "../../services/neDb/Schedule.service";
+import { TeamService } from "../../services/neDb/Team.service";
 import Run from "../../types/Run";
+import Services from "../../types/Services";
 
 export class RunController {
     public router: Router;
     private runService: RunService;
+    private bidService: BidService;
+    private scheduleService: ScheduleService;
+    private teamService: TeamService;
 
-    constructor(runService: RunService) {
+    constructor(runService: RunService, services: Services) {
         this.router = Router();
         this.runService = runService;
+        this.bidService = services.bidService
+        this.scheduleService = services.scheduleService
+        this.teamService = services.teamService
         this.routes();
     }
 
@@ -31,28 +40,151 @@ export class RunController {
         res.status(201).json(newRun)
     }
 
-    public createWithInternalFieldsEmpty = async (req: Request, res: Response) => {
+    public createWithBidsAndTeams = async (req: Request, res: Response) => {
         const run = req['body'].run as Run;
-        const newRun = await this.runService.createWithInternalFieldsEmpty(run);
+
+        const schedule = await this.scheduleService.findById(run.scheduleId)
+
+        for (let i = 0; i < run.teams.length; i++) {
+            const team = run.teams[i];
+
+            const savedTeam = await this.teamService.create(team)
+            run.teams[i] = savedTeam
+
+        }
+
+        for (let i = 0; i < run.bids.length; i++) {
+            const bid = run.bids[i]
+            const savedBid = await this.bidService.create(bid)
+            run.bids[i] = savedBid
+        }
+
+        const newRun = await this.runService.create(run);
+
+        schedule[0].availableRuns.push(newRun)
+        await this.scheduleService.update(newRun.scheduleId, schedule[0])
+
         res.status(201).json(newRun)
     }
 
     public update = async (req: Request, res: Response) => {
         const run = req['body'].run as Run;
         const id = req['params']['id'];
-        res.status(201).json(await this.runService.update(id, run));
+
+        const oldRun: Run[] = await this.runService.findById(id)
+
+        const schedule = await this.scheduleService.findById(run.scheduleId)
+
+        for (let i = 0; i < oldRun[0].teams.length; i++) {
+            const oldTeamIndex = run.teams.findIndex(team => team._id == oldRun[0].teams[i]._id)
+            if (oldTeamIndex == -1) {
+                await this.teamService.delete(oldRun[0].teams[i]._id)
+            }
+        }
+
+        for (let i = 0; i < run.teams.length; i++) {
+            const newTeam = run.teams[i];
+            const oldTeamIndex = oldRun[0].teams.findIndex(team => team._id == newTeam._id)
+            if (oldTeamIndex != -1) {
+                const updatedTeam = await this.teamService.update(newTeam._id, newTeam)
+                run.teams[i] = updatedTeam
+            } else {
+                const createdTeam = await this.teamService.create(newTeam)
+                run.teams[i] = createdTeam
+            }
+        }
+
+        for (let i = 0; i < oldRun[0].bids.length; i++) {
+            const oldBidIndex = run.bids.findIndex(bid => bid._id == oldRun[0].bids[i]._id)
+            if (oldBidIndex == -1) {
+                await this.bidService.delete(oldRun[0].bids[i]._id)
+            }
+        }
+
+        for (let i = 0; i < run.bids.length; i++) {
+            const newBid = run.bids[i];
+            const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
+            if (oldBidIndex != -1) {
+                const updatedBid = await this.bidService.update(newBid._id, newBid)
+                run.bids[i] = updatedBid
+            } else {
+                const createdBid = await this.bidService.create(newBid)
+                run.bids[i] = createdBid
+            }
+        }
+
+        let founded = false
+
+        for (let i = 0; i < schedule[0].rows.length; i++) {
+            const oldRow = schedule[0].rows[i]
+            if (oldRow.row._id == id) {
+                schedule[0].rows[i].row = run
+                founded = true
+                break
+            }
+        }
+
+        if (!founded) {
+            for (let i = 0; i < schedule[0].availableRuns.length; i++) {
+                const oldRow = schedule[0].availableRuns[i]
+                if (oldRow._id == id) {
+                    schedule[0].availableRuns[i] = run
+                    break
+                }
+            }
+        }
+
+        const updatedRun = await this.runService.update(id, run)
+
+        await this.scheduleService.update(run.scheduleId, schedule[0])
+
+        res.status(201).json(updatedRun);
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.status(200).json(await this.runService.delete(id));
+
+        const run: Run[] = await this.runService.findById(id);
+        const schedule = await this.scheduleService.findById(run[0].scheduleId)
+
+        for (let i = 0; i < run[0].teams.length; i++) {
+            await this.teamService.delete(run[0].teams[i]._id)
+        }
+
+        for (let i = 0; i < run[0].bids.length; i++) {
+            await this.bidService.delete(run[0].bids[i]._id)
+        }
+
+        let founded = false
+
+        if (schedule[0].rows.length > 0) {
+            const rowIndex = schedule[0].rows.findIndex(scheduleRow => scheduleRow.row._id == run[0]._id)
+            if (rowIndex != 1) {
+                schedule[0].rows.splice(rowIndex, 1)
+                founded = true
+            }
+        }
+
+        if (!founded) {
+            if (schedule[0].availableRuns.length > 0) {
+                const availableRunIndex = schedule[0].availableRuns.findIndex(row => row._id == run[0]._id)
+                if (availableRunIndex != 1)
+                    schedule[0].availableRuns.splice(availableRunIndex, 1)
+            }
+        }
+
+        await this.scheduleService.update(schedule[0]._id, schedule[0])
+
+        const numDeleted = await this.runService.delete(id)
+
+        res.status(200).json({ deletedRun: run, num: numDeleted });
     }
 
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
         this.router.post('/', this.create);
-        this.router.post('/advanced', this.createWithInternalFieldsEmpty);
+        this.router.post('/advanced', this.createWithBidsAndTeams);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
     }

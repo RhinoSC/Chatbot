@@ -1,12 +1,13 @@
 import { Router, Request, Response } from "express";
 import { UserService } from "../../services/neDb/User.service";
+import Services from "../../types/Services";
 import User from "../../types/User";
 
 export class UserController {
     public router: Router;
     private userService: UserService;
 
-    constructor(userService: UserService) {
+    constructor(userService: UserService, services: Services) {
         this.router = Router();
         this.userService = userService;
         this.routes();

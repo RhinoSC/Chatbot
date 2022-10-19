@@ -1,14 +1,18 @@
 import { Router, Request, Response } from "express";
 import { DonationService } from "../../services/neDb/Donation.service";
+import { EventService } from "../../services/neDb/Event.service";
 import Donation from "../../types/Donation";
+import Services from "../../types/Services";
 
 export class DonationController {
     public router: Router;
     private donationService: DonationService;
+    private eventService: EventService;
 
-    constructor(donationService: DonationService) {
+    constructor(donationService: DonationService, services: Services) {
         this.router = Router();
         this.donationService = donationService;
+        this.eventService = services.eventService
         this.routes();
     }
 
@@ -27,19 +31,52 @@ export class DonationController {
     public create = async (req: Request, res: Response) => {
         const donation = req['body'].donation as Donation;
         const newDonation = await this.donationService.create(donation);
+
+        if (newDonation._id) {
+            const event = await this.eventService.findById(newDonation.eventId)
+            event[0].donations.push(newDonation)
+            this.eventService.update(event[0]._id, event[0])
+        }
+
         res.status(201).json(newDonation)
-        // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
         const donation = req['body'].donation as Donation;
         const id = req['params']['id'];
-        res.status(201).json(await this.donationService.update(id, donation));
+
+        const updatedDonation = await this.donationService.update(id, donation)
+
+        if (updatedDonation._id) {
+            const event = await this.eventService.findById(updatedDonation.eventId)
+            const idx = event[0].donations.findIndex(don => don._id === updatedDonation._id)
+            if (idx !== -1) {
+                event[0].donations[idx] = updatedDonation
+                this.eventService.update(event[0]._id, event[0])
+            }
+            this.eventService.update(event[0]._id, event[0])
+        }
+
+        res.status(201).json(updatedDonation);
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.status(200).json(await this.donationService.delete(id));
+
+        const donation: Donation[] = await this.donationService.findById(id);
+
+        if (donation[0]._id) {
+            const event = await this.eventService.findById(donation[0].eventId)
+            const idx = event[0].donations.findIndex(don => don._id === donation[0]._id)
+            if (idx !== -1) {
+                event[0].donations.splice(idx, 1)
+                this.eventService.update(event[0]._id, event[0])
+            }
+        }
+
+        const numDeleted = await this.donationService.delete(id)
+
+        res.status(200).json({ deletedDonation: donation, num: numDeleted });
     }
 
     public routes() {

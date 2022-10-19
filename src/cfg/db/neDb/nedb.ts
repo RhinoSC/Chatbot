@@ -78,14 +78,14 @@ class neDB implements neDBInterface {
 
     public createControllers() {
         this.controllers = {
-            userController: new UserController(this.services.userService),
-            teamController: new TeamController(this.services.teamService),
-            bidController: new BidController(this.services.bidService),
-            donationController: new DonationController(this.services.donationService),
-            eventController: new EventController(this.services.eventService),
-            prizeController: new PrizeController(this.services.prizeService),
-            scheduleController: new ScheduleController(this.services.scheduleService),
-            runController: new RunController(this.services.runService),
+            userController: new UserController(this.services.userService, this.services),
+            teamController: new TeamController(this.services.teamService, this.services),
+            bidController: new BidController(this.services.bidService, this.services),
+            donationController: new DonationController(this.services.donationService, this.services),
+            eventController: new EventController(this.services.eventService, this.services),
+            prizeController: new PrizeController(this.services.prizeService, this.services),
+            scheduleController: new ScheduleController(this.services.scheduleService, this.services),
+            runController: new RunController(this.services.runService, this.services),
         };
     }
 }
