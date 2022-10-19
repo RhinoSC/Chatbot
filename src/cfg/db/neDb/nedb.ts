@@ -15,7 +15,6 @@ import { ScheduleService } from "../../../services/neDb/Schedule.service";
 import { TeamService } from "../../../services/neDb/Team.service";
 import { UserService } from "../../../services/neDb/User.service";
 
-// import { v4 as uuidv4 } from 'uuid';
 var Datastore = require('nedb')
 import { neDB as neDBInterface } from "./nedb.interface";
 
@@ -73,7 +72,6 @@ class neDB implements neDBInterface {
         this.services.prizeService = new PrizeService(this.db.prize)
         this.services.scheduleService = new ScheduleService(this.db.schedule)
         this.services.runService = new RunService(this.db.run)
-        // this.services.runService = new RunService(this.db.run, this.services.bidService)
     }
 
     public createControllers() {
