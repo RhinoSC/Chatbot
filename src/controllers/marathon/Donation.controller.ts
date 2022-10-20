@@ -1,8 +1,11 @@
 import { Router, Request, Response } from "express";
+import { checkJwt } from "../../middleware/authz.middleware";
+import { checkPermissions } from "../../middleware/permissions.middleware";
 import { DonationService } from "../../services/neDb/Donation.service";
 import { EventService } from "../../services/neDb/Event.service";
 import Donation from "../../types/Donation";
 import Services from "../../types/Services";
+import { permissions } from "../../utils/enums/role.enum";
 
 export class DonationController {
     public router: Router;
@@ -82,6 +85,8 @@ export class DonationController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
+        this.router.use(checkJwt);
+        this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);

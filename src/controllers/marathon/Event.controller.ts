@@ -1,7 +1,10 @@
 import { Router, Request, Response } from "express";
+import { checkJwt } from "../../middleware/authz.middleware";
+import { checkPermissions } from "../../middleware/permissions.middleware";
 import { EventService } from "../../services/neDb/Event.service";
 import Event from "../../types/Event";
 import Services from "../../types/Services";
+import { permissions } from "../../utils/enums/role.enum";
 
 export class EventController {
     public router: Router;
@@ -54,6 +57,8 @@ export class EventController {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
         this.router.get('/name/:name', this.indexName);
+        this.router.use(checkJwt);
+        this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);

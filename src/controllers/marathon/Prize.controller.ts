@@ -4,6 +4,12 @@ import { PrizeService } from "../../services/neDb/Prize.service";
 import Prize from "../../types/Prize";
 import Services from "../../types/Services";
 
+import { checkJwt } from "../../middleware/authz.middleware";
+import { checkPermissions } from "../../middleware/permissions.middleware";
+import { permissions } from "../../utils/enums/role.enum";
+import jwtAuthz from "express-jwt-authz";
+import { requiredScopes } from "express-oauth2-jwt-bearer";
+
 export class PrizeController {
     public router: Router;
     private prizeService: PrizeService;
@@ -83,6 +89,8 @@ export class PrizeController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
+        this.router.use(checkJwt);
+        this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);

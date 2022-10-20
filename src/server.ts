@@ -84,10 +84,14 @@ class ServerBot {
     }
 
     public routes() {
+
+        // public endpoints
+
         // chatbot
         this.app.use('/api/commands/', this.controllers.commandController.router);
         this.app.use('/api/timers/', this.controllers.timerController.router);
         this.app.use('/api/horaro/', this.controllers.horaroController.router);
+
 
         // marathon
         this.app.use('/api/tracker/bid/', this.controllers.bidController.router);

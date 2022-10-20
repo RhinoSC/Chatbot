@@ -1,8 +1,11 @@
 import { Router, Request, Response } from "express";
+import { checkJwt } from "../../middleware/authz.middleware";
+import { checkPermissions } from "../../middleware/permissions.middleware";
 import { BidService } from "../../services/neDb/Bid.service";
 import { RunService } from "../../services/neDb/Run.service";
 import Bid from "../../types/Bid";
 import Services from "../../types/Services";
+import { permissions } from "../../utils/enums/role.enum";
 
 export class BidController {
     public router: Router;
@@ -52,6 +55,8 @@ export class BidController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
+        this.router.use(checkJwt);
+        this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);

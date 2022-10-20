@@ -7,6 +7,9 @@ import Run from "../../types/Run";
 import Bid from "../../types/Bid";
 import Services from "../../types/Services";
 import { EventService } from "../../services/neDb/Event.service";
+import { checkJwt } from "../../middleware/authz.middleware";
+import { checkPermissions } from "../../middleware/permissions.middleware";
+import { permissions } from "../../utils/enums/role.enum";
 
 export class RunController {
     public router: Router;
@@ -244,6 +247,8 @@ export class RunController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
+        this.router.use(checkJwt);
+        this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/', this.create);
         this.router.post('/advanced', this.createWithBidsAndTeams);
         this.router.put('/advanced/:id', this.updateWithBidsAndTeams);

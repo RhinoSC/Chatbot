@@ -1,7 +1,10 @@
 import { Router, Request, Response } from "express";
+import { checkJwt } from "../../middleware/authz.middleware";
+import { checkPermissions } from "../../middleware/permissions.middleware";
 import { TeamService } from "../../services/neDb/Team.service";
 import Services from "../../types/Services";
 import Team from "../../types/Team";
+import { permissions } from "../../utils/enums/role.enum";
 
 export class TeamController {
     public router: Router;
@@ -46,6 +49,8 @@ export class TeamController {
     public routes() {
         this.router.get('/', this.index);
         this.router.get('/:id', this.indexId);
+        this.router.use(checkJwt);
+        this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/', this.create);
         this.router.put('/:id', this.update);
         this.router.delete('/:id', this.delete);
