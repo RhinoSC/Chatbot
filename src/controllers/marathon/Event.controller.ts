@@ -33,13 +33,15 @@ export class EventController {
 
     public getTotalDonationMount = async (req: Request, res: Response) => {
         const id = req['params']['id'];
+        const event = await this.eventService.findById(id)
         const donations = await this.donationService.find()
         let amount = 0.0
         donations.forEach(donation => {
-            amount += Number(donation.amount)
+            if (donation.eventId === id)
+                amount += Number(donation.amount)
         })
-        console.log(amount)
-        res.status(201).json({ totalAmount: amount })
+        // console.log(amount)
+        res.status(201).json({ totalAmount: amount, amount: event[0].isCharityData.totalDonated })
     }
 
     public indexName = async (req: Request, res: Response) => {

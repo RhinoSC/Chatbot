@@ -114,8 +114,8 @@ class ServerBot {
         }), {
             cors: {
                 // origin: "*",
-                origin: "http://localhost:8080",
-                methods: ["GET", "POST"],
+                origin: ["http://localhost:8080", "http://localhost:9090"],
+                methods: ["GET", "POST", "PUT", "DELETE"],
                 credentials: true
             },
             allowEIO3: true
