@@ -245,14 +245,14 @@ export class RunController {
     }
 
     public routes() {
-        this.router.get('/', this.index);
-        this.router.get('/:id', this.indexId);
+        this.router.get('/all', this.index);
+        this.router.get('/one/:id', this.indexId);
         this.router.use(checkJwt);
         this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
-        this.router.post('/', this.create);
+        this.router.post('/one', this.create);
         this.router.post('/advanced', this.createWithBidsAndTeams);
-        this.router.put('/advanced/:id', this.updateWithBidsAndTeams);
-        this.router.put('/:id', this.update);
-        this.router.delete('/:id', this.delete);
+        this.router.put('/one/advanced/:id', this.updateWithBidsAndTeams);
+        this.router.put('/one/:id', this.update);
+        this.router.delete('/one/:id', this.delete);
     }
 }

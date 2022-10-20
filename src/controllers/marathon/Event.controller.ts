@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { checkJwt } from "../../middleware/authz.middleware";
 import { checkPermissions } from "../../middleware/permissions.middleware";
+import { DonationService } from "../../services/neDb/Donation.service";
 import { EventService } from "../../services/neDb/Event.service";
 import Event from "../../types/Event";
 import Services from "../../types/Services";
@@ -9,10 +10,12 @@ import { permissions } from "../../utils/enums/role.enum";
 export class EventController {
     public router: Router;
     private eventService: EventService;
+    private donationService: DonationService;
 
     constructor(eventService: EventService, services: Services) {
         this.router = Router();
         this.eventService = eventService;
+        this.donationService = services.donationService;
         this.routes();
     }
 
@@ -26,6 +29,17 @@ export class EventController {
         const event = await this.eventService.findById(id)
         console.log(event);
         res.json(event);
+    }
+
+    public getTotalDonationMount = async (req: Request, res: Response) => {
+        const id = req['params']['id'];
+        const donations = await this.donationService.find()
+        let amount = 0.0
+        donations.forEach(donation => {
+            amount += Number(donation.amount)
+        })
+        console.log(amount)
+        res.status(201).json({ totalAmount: amount })
     }
 
     public indexName = async (req: Request, res: Response) => {
@@ -54,13 +68,14 @@ export class EventController {
     }
 
     public routes() {
-        this.router.get('/', this.index);
-        this.router.get('/:id', this.indexId);
+        this.router.get('/all', this.index);
         this.router.get('/name/:name', this.indexName);
+        this.router.get('/one/:id', this.indexId);
+        this.router.get('/one/:id/total-donated', this.getTotalDonationMount);
         this.router.use(checkJwt);
         this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
-        this.router.post('/', this.create);
-        this.router.put('/:id', this.update);
-        this.router.delete('/:id', this.delete);
+        this.router.post('/one', this.create);
+        this.router.put('/one/one/:id', this.update);
+        this.router.delete('/one/:id', this.delete);
     }
 }

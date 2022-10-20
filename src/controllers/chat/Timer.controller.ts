@@ -76,10 +76,10 @@ export class TimerController {
         this.router.post('/intervals/start/:id', this.startInterval);
         this.router.post('/intervals/stop/:id', this.stopInterval);
         this.router.post('/intervals/refresh/:id', this.refreshInterval);
-        this.router.get('/', this.index);
-        this.router.get('/:id', this.indexId);
-        this.router.post('/', this.create);
-        this.router.put('/:id', this.update);
-        this.router.delete('/:id', this.delete);
+        this.router.get('/all', this.index);
+        this.router.get('/one/:id', this.indexId);
+        this.router.post('/one/', this.create);
+        this.router.put('/one/:id', this.update);
+        this.router.delete('/one/:id', this.delete);
     }
 }

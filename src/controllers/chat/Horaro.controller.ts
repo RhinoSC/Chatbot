@@ -21,6 +21,6 @@ export class HoraroController {
     }
 
     public routes() {
-        this.router.get('/', this.index);
+        this.router.get('/all', this.index);
     }
 }

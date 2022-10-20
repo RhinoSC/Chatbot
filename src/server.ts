@@ -26,13 +26,13 @@ class ServerBot {
     private app: express.Application;
     private chatDB: DB;
     private horarioAPI: horaroAPI;
-    private twitchAPI: twitchAPI;
-    private tmi: TmiChat;
+    // private twitchAPI: twitchAPI;
+    // private tmi: TmiChat;
     private neDB: neDB;
 
     private controllers: {
-        commandController: CommandController,
-        timerController: TimerController,
+        // commandController: CommandController,
+        // timerController: TimerController,
         horaroController: HoraroController,
         bidController: BidController,
         donationController: DonationController,
@@ -48,13 +48,13 @@ class ServerBot {
         this.app = express();
         this.chatDB = new DB('./chatbot.db');
         this.horarioAPI = new horaroAPI();
-        this.twitchAPI = new twitchAPI();
-        this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
+        // this.twitchAPI = new twitchAPI();
+        // this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
         this.neDB = neDBObject
 
         this.controllers = {
-            commandController: new CommandController(this.chatDB.getDb(), this.tmi),
-            timerController: new TimerController(this.chatDB.getDb(), this.tmi),
+            // commandController: new CommandController(this.chatDB.getDb(), this.tmi),
+            // timerController: new TimerController(this.chatDB.getDb(), this.tmi),
             horaroController: new HoraroController(),
 
             bidController: neDBObject.controllers.bidController,
@@ -88,8 +88,8 @@ class ServerBot {
         // public endpoints
 
         // chatbot
-        this.app.use('/api/commands/', this.controllers.commandController.router);
-        this.app.use('/api/timers/', this.controllers.timerController.router);
+        // this.app.use('/api/commands/', this.controllers.commandController.router);
+        // this.app.use('/api/timers/', this.controllers.timerController.router);
         this.app.use('/api/horaro/', this.controllers.horaroController.router);
 
 
@@ -108,7 +108,7 @@ class ServerBot {
     }
 
     public async start() {
-        await this.twitchAPI.init()
+        // await this.twitchAPI.init()
         const io = new Server(this.app.listen(this.app.get('port'), () => {
             console.log(`Server is listening ${this.app.get('port')} port.`);
         }), {

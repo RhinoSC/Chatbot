@@ -19,6 +19,10 @@ export class DonationController {
         this.routes();
     }
 
+    public hola = async (req: Request, res: Response) => {
+        console.log('funcione')
+        res.json('donations');
+    }
     public index = async (req: Request, res: Response) => {
         const donations = await this.donationService.find()
         res.json(donations);
@@ -87,12 +91,12 @@ export class DonationController {
     }
 
     public routes() {
-        this.router.get('/', this.index);
-        this.router.get('/:id', this.indexId);
+        this.router.get('/all', this.index);
+        this.router.get('/one/:id', this.indexId);
         this.router.use(checkJwt);
         this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
-        this.router.post('/', this.create);
-        this.router.put('/:id', this.update);
-        this.router.delete('/:id', this.delete);
+        this.router.post('/one', this.create);
+        this.router.put('/one/:id', this.update);
+        this.router.delete('/one/:id', this.delete);
     }
 }
