@@ -64,7 +64,7 @@ export class EventController {
         const id = req['params']['id'];
 
         const updatedEvent = await this.eventService.update(id, event)
-        await nodecg.axios.post('/sre9/update-event', { event: event })
+        await nodecg.axios.post('/sre9/update-event', { event: updatedEvent })
         res.status(201).json(updatedEvent);
     }
 
