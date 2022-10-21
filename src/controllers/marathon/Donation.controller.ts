@@ -93,6 +93,7 @@ export class DonationController {
     public routes() {
         this.router.get('/all', this.index);
         this.router.get('/one/:id', this.indexId);
+        this.router.post('/public', this.create);
         this.router.use(checkJwt);
         this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/one', this.create);

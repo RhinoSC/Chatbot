@@ -201,6 +201,65 @@ export class RunController {
         res.status(201).json(updatedRun);
     }
 
+    public updateWithBids = async (req: Request, res: Response) => {
+        const run = req['body'].run as Run;
+        const id = req['params']['id'];
+
+        const oldRun: Run[] = await this.runService.findById(id)
+
+        const schedule = await this.scheduleService.findById(run.scheduleId)
+
+        for (let i = 0; i < oldRun[0].bids.length; i++) {
+            const oldBidIndex = run.bids.findIndex(bid => bid._id == oldRun[0].bids[i]._id)
+            if (oldBidIndex == -1) {
+                await this.bidService.delete(oldRun[0].bids[i]._id)
+            }
+        }
+
+        for (let i = 0; i < run.bids.length; i++) {
+            const newBid = run.bids[i];
+            const oldBidIndex = oldRun[0].bids.findIndex(bid => bid._id == newBid._id)
+            if (oldBidIndex != -1) {
+                const updatedBid = await this.bidService.update(newBid._id, newBid)
+                run.bids[i] = updatedBid
+            } else {
+                const createdBid = await this.bidService.create(newBid)
+                run.bids[i] = createdBid
+            }
+        }
+
+        let founded = false
+
+        for (let i = 0; i < schedule[0].rows.length; i++) {
+            const oldRow = schedule[0].rows[i]
+            if (oldRow.row._id == id) {
+                schedule[0].rows[i].row = run
+                founded = true
+                break
+            }
+        }
+
+        if (!founded) {
+            for (let i = 0; i < schedule[0].availableRuns.length; i++) {
+                const oldRow = schedule[0].availableRuns[i]
+                if (oldRow._id == id) {
+                    schedule[0].availableRuns[i] = run
+                    break
+                }
+            }
+        }
+
+        const updatedRun = await this.runService.update(id, run)
+
+        const updatedSchedule = await this.scheduleService.update(run.scheduleId, schedule[0])
+
+        const event = await this.eventService.findById(updatedSchedule.eventId)
+        event[0].schedule = updatedSchedule
+        this.eventService.update(event[0]._id, event[0])
+
+        res.status(201).json(updatedRun);
+    }
+
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
 
@@ -247,6 +306,7 @@ export class RunController {
     public routes() {
         this.router.get('/all', this.index);
         this.router.get('/one/:id', this.indexId);
+        this.router.put('/bids/:id', this.updateWithBids);
         this.router.use(checkJwt);
         this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/one', this.create);
