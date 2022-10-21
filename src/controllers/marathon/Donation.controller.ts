@@ -41,7 +41,7 @@ export class DonationController {
 
         if (newDonation._id) {
             const event = await this.eventService.findById(newDonation.eventId)
-            event[0].isCharityData.totalDonated += newDonation.amount
+            event[0].isCharityData.totalDonated += Number(newDonation.amount)
             event[0].donations.push(newDonation)
             this.eventService.update(event[0]._id, event[0])
         }
@@ -57,7 +57,7 @@ export class DonationController {
 
         if (updatedDonation._id) {
             const event = await this.eventService.findById(updatedDonation.eventId)
-            event[0].isCharityData.totalDonated += updatedDonation.amount
+            event[0].isCharityData.totalDonated += Number(updatedDonation.amount)
             const idx = event[0].donations.findIndex(don => don._id === updatedDonation._id)
             if (idx !== -1) {
                 event[0].donations[idx] = updatedDonation
@@ -77,7 +77,7 @@ export class DonationController {
 
         if (donation[0]._id) {
             const event = await this.eventService.findById(donation[0].eventId)
-            event[0].isCharityData.totalDonated -= donation[0].amount
+            event[0].isCharityData.totalDonated -= Number(donation[0].amount)
             const idx = event[0].donations.findIndex(don => don._id === donation[0]._id)
             if (idx !== -1) {
                 event[0].donations.splice(idx, 1)
