@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import nodecg from "../../cfg/nodecg";
 import { checkJwt } from "../../middleware/authz.middleware";
 import { checkPermissions } from "../../middleware/permissions.middleware";
 import { DonationService } from "../../services/neDb/Donation.service";
@@ -61,7 +62,10 @@ export class EventController {
     public update = async (req: Request, res: Response) => {
         const event = req['body'].event as Event;
         const id = req['params']['id'];
-        res.status(201).json(await this.eventService.update(id, event));
+
+        const updatedEvent = await this.eventService.update(id, event)
+        await nodecg.axios.post('/sre9/update-event', { event: event })
+        res.status(201).json(updatedEvent);
     }
 
     public delete = async (req: Request, res: Response) => {

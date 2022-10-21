@@ -1,4 +1,5 @@
 import Team from "./Team";
+import Bid from "./Bid"
 
 export default interface Run {
     _id: string;

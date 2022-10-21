@@ -1,5 +1,3 @@
-import Run from "./Run";
-
 export default interface Donation {
     _id: string;
     name: string;
