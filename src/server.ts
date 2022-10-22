@@ -119,16 +119,16 @@ class ServerBot {
         // });
         const io = new Server(this.app.listen(this.app.get('port'), () => {
             console.log(`Server is listening ${this.app.get('port')} port.`);
-        }), 
-        // {
-        //     cors: {
-        //         // origin: "*",
-        //         origin: ["http://localhost:8080", "http://localhost:9090"],
-        //         methods: ["GET", "POST", "PUT", "DELETE"],
-        //         credentials: true
-        //     },
-        //     allowEIO3: true
-        // }
+        }),
+            {
+                cors: {
+                    origin: "*",
+                    // origin: ["http://localhost:8080", "http://localhost:9090"],
+                    methods: ["GET", "POST", "PUT", "DELETE"],
+                    credentials: true
+                },
+                allowEIO3: true
+            }
         );
 
         io.on('connection', (socket) => {
