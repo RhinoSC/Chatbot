@@ -90,7 +90,7 @@ export class EventController {
         this.router.use(checkJwt);
         this.router.use(checkPermissions([permissions["create:all"], permissions["read:all"], permissions["update:all"]]))
         this.router.post('/one', this.create);
-        this.router.put('/one/one/:id', this.update);
+        this.router.put('/one/:id', this.update);
         this.router.delete('/one/:id', this.delete);
     }
 }
