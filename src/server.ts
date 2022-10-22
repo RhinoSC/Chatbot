@@ -111,15 +111,16 @@ class ServerBot {
 
     public async start() {
         // await this.twitchAPI.init()
-        https.createServer({
-            cert: fs.readFileSync(process.env.CERT as string),
-            key: fs.readFileSync(process.env.KEY as string)
-        }, this.app).listen(this.app.get('port'), function () {
-            console.log('Servidor https corriendo en el puerto 443');
-        });
-        // const io = new Server(this.app.listen(this.app.get('port'), () => {
-        //     console.log(`Server is listening ${this.app.get('port')} port.`);
-        // }), {
+        // https.createServer({
+        //     cert: fs.readFileSync(process.env.CERT as string),
+        //     key: fs.readFileSync(process.env.KEY as string)
+        // }, this.app).listen(this.app.get('port'), function () {
+        //     console.log('Servidor https corriendo en el puerto 443');
+        // });
+        const io = new Server(this.app.listen(this.app.get('port'), () => {
+            console.log(`Server is listening ${this.app.get('port')} port.`);
+        }), 
+        // {
         //     cors: {
         //         // origin: "*",
         //         origin: ["http://localhost:8080", "http://localhost:9090"],
@@ -127,14 +128,15 @@ class ServerBot {
         //         credentials: true
         //     },
         //     allowEIO3: true
-        // });
+        // }
+        );
 
-        // io.on('connection', (socket) => {
-        //     console.log('a user connected');
-        //     io.emit('getCounter', this.horarioAPI.getCounter())
-        // });
+        io.on('connection', (socket) => {
+            console.log('a user connected');
+            io.emit('getCounter', this.horarioAPI.getCounter())
+        });
 
-        // socketContext.set(io);
+        socketContext.set(io);
 
         // this.tmi.start()
     }
