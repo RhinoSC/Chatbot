@@ -1,6 +1,8 @@
 require('dotenv').config()
 import cors from 'cors';
 import express, { Request, Response } from 'express';
+import fs from 'fs'
+import https from 'https';
 import { Server } from "socket.io";
 import socketContext from './cfg/socket-context';
 
@@ -109,59 +111,32 @@ class ServerBot {
 
     public async start() {
         // await this.twitchAPI.init()
-        const io = new Server(this.app.listen(this.app.get('port'), () => {
-            console.log(`Server is listening ${this.app.get('port')} port.`);
-        }), {
-            cors: {
-                // origin: "*",
-                origin: ["http://localhost:8080", "http://localhost:9090"],
-                methods: ["GET", "POST", "PUT", "DELETE"],
-                credentials: true
-            },
-            allowEIO3: true
+        https.createServer({
+            cert: fs.readFileSync(process.env.CERT as string),
+            key: fs.readFileSync(process.env.KEY as string)
+        }, this.app).listen(this.app.get('port'), function () {
+            console.log('Servidor https corriendo en el puerto 443');
         });
+        // const io = new Server(this.app.listen(this.app.get('port'), () => {
+        //     console.log(`Server is listening ${this.app.get('port')} port.`);
+        // }), {
+        //     cors: {
+        //         // origin: "*",
+        //         origin: ["http://localhost:8080", "http://localhost:9090"],
+        //         methods: ["GET", "POST", "PUT", "DELETE"],
+        //         credentials: true
+        //     },
+        //     allowEIO3: true
+        // });
 
-        io.on('connection', (socket) => {
-            console.log('a user connected');
-            io.emit('getCounter', this.horarioAPI.getCounter())
-        });
+        // io.on('connection', (socket) => {
+        //     console.log('a user connected');
+        //     io.emit('getCounter', this.horarioAPI.getCounter())
+        // });
 
-        // io.on('getCounter', (socket) => {
-        //     console.log('holaaaa');
-
-        // })
-
-        socketContext.set(io);
+        // socketContext.set(io);
 
         // this.tmi.start()
-
-
-
-
-        // testing nedb
-        // let event = {
-        //     name: 'test2',
-        // }
-        // const a = await this.eventDB.addNewEvent(event)
-
-        // let eventRepo: EventRepository = new EventRepository(this.neDB.db.event)
-
-        // let res = await eventRepo.findEvents()
-        // console.log(res)
-
-        // let b = await this.eventDB.findEventByName('test2')
-        // console.log(b)
-        // let res = await this.eventDB.deleteEvent(b[0]._id)
-
-        // [{ name: string, _id: string }]
-        // b = await this.eventDB.updateEvent(b[0]._id, event)
-        // console.log(b)
-        // this.eventDB.findEvent('esc5tDah5sDtmz2v').then((event: any) => {
-        //     console.log(event)
-        // }).catch(err => {
-        //     console.error('hola')
-        //     console.error(err)
-        // })
     }
 
 }
