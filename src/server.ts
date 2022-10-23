@@ -111,12 +111,12 @@ class ServerBot {
 
     public async start() {
         // await this.twitchAPI.init()
-        // https.createServer({
-        //     cert: fs.readFileSync(process.env.CERT as string),
-        //     key: fs.readFileSync(process.env.KEY as string)
-        // }, this.app).listen(this.app.get('port'), function () {
-        //     console.log('Servidor https corriendo en el puerto 443');
-        // });
+        https.createServer({
+            cert: fs.readFileSync(process.env.CERT as string),
+            key: fs.readFileSync(process.env.KEY as string)
+        }, this.app).listen(process.env.S_PORT, function () {
+            console.log(`Servidor https listening ${process.env.S_PORT}`);
+        });
         const io = new Server(this.app.listen(this.app.get('port'), () => {
             console.log(`Server is listening ${this.app.get('port')} port.`);
         }),
