@@ -1,5 +1,10 @@
-{"name":"Seleccionar idioma: Japones vs Ingles","game":"Hollow Knight","goal":0,"current":0,"description":"Esto es una descripcion de prueba ","type":0,"newBids":false,"bids":[{"name":"Ingles","current":0},{"name":"Japones","current":0}],"openBid":true,"runId":"yK6FkgJRdgOc0MVQ","eventId":"4V7Jzoj4cC4hzVdX","_id":"7Yc5BmOMtHR3PRYJ"}
-{"name":"Seleccionar nombre de archivo","game":"Hollow Knight","goal":0,"current":0,"description":"Esto es otra descricpion mas larga amigo, por que es importante probar","type":0,"newBids":true,"bids":[{"name":"Pepito","current":0},{"name":"Rhino","current":0},{"name":"Chemi","current":0}],"openBid":true,"runId":"yK6FkgJRdgOc0MVQ","eventId":"4V7Jzoj4cC4hzVdX","_id":"em1t0o4unc0TNC0H"}
-{"name":"prueba1","game":"Hollow Knight","goal":1234,"current":0,"description":"","type":1,"newBids":false,"bids":[],"openBid":true,"runId":"yK6FkgJRdgOc0MVQ","eventId":"4V7Jzoj4cC4hzVdX","_id":"oDzAUFgRqeN88yCY"}
-{"name":"Bonus Game: jugarlo","game":"BONUS GAME 1: Phasmophobia","goal":500,"current":0,"description":"","type":2,"newBids":false,"bids":[],"openBid":true,"runId":"0gnF76GilrkIDA3N","eventId":"4V7Jzoj4cC4hzVdX","_id":"nyyde3IHD3St6LDY"}
-{"name":"Bonus Game: jugarlo 2","game":"BONUS GAME 6: Super Mario 64","goal":800,"current":0,"description":"","type":2,"newBids":false,"bids":[],"openBid":true,"runId":"9Te8i9Di5lIt8vX0","eventId":"4V7Jzoj4cC4hzVdX","_id":"eGd8aoXP5pbhF0qw"}
+{"name":"Seleccionar idioma: Japones vs Ingles","game":"Hollow Knight","goal":0,"current":120,"description":"Esto es una descripcion de prueba ","type":0,"newBids":false,"bids":[{"name":"Japones","current":70},{"name":"Ingles","current":50}],"openBid":true,"runId":"yK6FkgJRdgOc0MVQ","eventId":"4V7Jzoj4cC4hzVdX","_id":"7Yc5BmOMtHR3PRYJ"}
+{"name":"Bonus Game: jugarlo 2","game":"BONUS GAME 6: Super Mario 64","goal":800,"current":490,"description":"","type":2,"newBids":false,"bids":[],"openBid":true,"runId":"9Te8i9Di5lIt8vX0","eventId":"4V7Jzoj4cC4hzVdX","_id":"eGd8aoXP5pbhF0qw"}
+{"name":"Seleccionar nombre de archivo","game":"Hollow Knight","goal":0,"current":170,"description":"Esto es otra descricpion mas larga amigo, por que es importante probar","type":0,"newBids":true,"bids":[{"name":"Pepito","current":80},{"name":"Rhino","current":40},{"name":"Chemi","current":0},{"name":"Nueva opcion","current":50}],"openBid":true,"runId":"yK6FkgJRdgOc0MVQ","eventId":"4V7Jzoj4cC4hzVdX","_id":"em1t0o4unc0TNC0H"}
+{"name":"Bonus Game: jugarlo","game":"BONUS GAME 1: Phasmophobia","goal":500,"current":490,"description":"","type":2,"newBids":false,"bids":[],"openBid":true,"runId":"0gnF76GilrkIDA3N","eventId":"4V7Jzoj4cC4hzVdX","_id":"nyyde3IHD3St6LDY"}
+{"name":"prueba1","game":"Hollow Knight","goal":1234,"current":200,"description":"","type":1,"newBids":false,"bids":[],"openBid":true,"runId":"yK6FkgJRdgOc0MVQ","eventId":"4V7Jzoj4cC4hzVdX","_id":"oDzAUFgRqeN88yCY"}
+{"$$deleted":true,"_id":"oDzAUFgRqeN88yCY"}
+{"$$deleted":true,"_id":"7Yc5BmOMtHR3PRYJ"}
+{"$$deleted":true,"_id":"em1t0o4unc0TNC0H"}
+{"$$deleted":true,"_id":"nyyde3IHD3St6LDY"}
+{"$$deleted":true,"_id":"eGd8aoXP5pbhF0qw"}
