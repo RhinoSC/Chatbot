@@ -25,6 +25,12 @@ export class BidService {
         return bid;
     }
 
+    public findByType = async (type: number): Promise<Bid[]> => {
+        const bids = await this.BidRepository.findBids()
+        const filterBids = bids.filter((bid: Bid) => bid.type === type)
+        return filterBids
+    }
+
     public create = async (bid: Bid) => {
         const newBid: Bid = await this.BidRepository.addNewBid(bid)
         return newBid;

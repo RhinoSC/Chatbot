@@ -1,5 +1,6 @@
 import { EventRepository } from "../../repository/neDb/Event.repository";
 import Event from "../../types/Event";
+import nodecg from "../../cfg/nodecg";
 
 export class EventService {
     private db: any;
@@ -37,6 +38,13 @@ export class EventService {
 
     public update = async (id: string, event: Event) => {
         const updateEvent: Event = await this.EventRepository.updateEvent(id, event)
+
+        try {
+            console.log('enviar a layout')
+            await nodecg.axios.post('/sre9/update-event', { event: updateEvent })
+        } catch (error) {
+            console.error(error, 'Error sending to nodecg the event')
+        }
         return updateEvent;
     }
 

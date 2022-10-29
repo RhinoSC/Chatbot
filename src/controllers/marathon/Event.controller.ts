@@ -50,9 +50,10 @@ export class EventController {
         const event = await this.eventService.findByName(name)
         console.log(event);
         try {
+            console.log('enviar a layout')
             await nodecg.axios.post('/sre9/update-event', { event: event[0] })
         } catch (error) {
-            console.error(error, 'Error sendind to nodecg the event')
+            console.error(error, 'Error sending to nodecg the event')
         }
         res.json(event);
     }
@@ -69,11 +70,11 @@ export class EventController {
         const id = req['params']['id'];
 
         const updatedEvent = await this.eventService.update(id, event)
-        try {
-            await nodecg.axios.post('/sre9/update-event', { event: updatedEvent })
-        } catch (error) {
-            console.error(error, 'Error sendind to nodecg the event')
-        }
+        // try {
+        //     await nodecg.axios.post('/sre9/update-event', { event: updatedEvent })
+        // } catch (error) {
+        //     console.error(error, 'Error sendind to nodecg the event')
+        // }
         res.status(201).json(updatedEvent);
     }
 
