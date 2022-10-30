@@ -28,8 +28,8 @@ class ServerBot {
     private app: express.Application;
     private chatDB: DB;
     private horarioAPI: horaroAPI;
-    // private twitchAPI: twitchAPI;
-    // private tmi: TmiChat;
+    private twitchAPI: twitchAPI;
+    private tmi: TmiChat;
     private neDB: neDB;
 
     private controllers: {
@@ -50,8 +50,8 @@ class ServerBot {
         this.app = express();
         this.chatDB = new DB('./chatbot.db');
         this.horarioAPI = new horaroAPI();
-        // this.twitchAPI = new twitchAPI();
-        // this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
+        this.twitchAPI = new twitchAPI();
+        this.tmi = new TmiChat(this.chatDB.getDb(), this.horarioAPI, this.twitchAPI);
         this.neDB = neDBObject
 
         this.controllers = {
@@ -110,7 +110,7 @@ class ServerBot {
     }
 
     public async start() {
-        // await this.twitchAPI.init()
+        await this.twitchAPI.init()
         https.createServer({
             cert: fs.readFileSync(process.env.CERT as string),
             key: fs.readFileSync(process.env.KEY as string)
@@ -138,7 +138,7 @@ class ServerBot {
 
         socketContext.set(io);
 
-        // this.tmi.start()
+        this.tmi.start()
     }
 
 }
