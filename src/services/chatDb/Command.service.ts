@@ -32,7 +32,7 @@ export class CommandService {
                 return element.call == command.name || command.alias.split(',').includes(element.call);
             })
             if (!command.custom) {
-                let customRun = require(`../commands/${command.name}.js`)
+                let customRun = require(`../../commands/${command.name}.js`)
                 if (customRun) {
                     text = await customRun(args, horaroAPI, twitchAPI);
                     if (interval && !isInterval) {

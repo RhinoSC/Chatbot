@@ -74,7 +74,7 @@ export class TimerService {
         const command = this.commands.find(n => n.name === temp.call || n.alias.split(',').includes(temp.call));
         if (command) {
             if (!command.custom) {
-                let customTimer = require(`../commands/${command.name}.js`)
+                let customTimer = require(`../../commands/${command.name}.js`)
                 if (customTimer) {
                     return this.getIntervals()[id - 1].startTimer(command);
                 }
@@ -95,7 +95,7 @@ export class TimerService {
         const command = this.commands.find(n => n.name === temp.call || n.alias.split(',').includes(temp.call));
         if (command) {
             if (!command.custom) {
-                let customTimer = require(`../commands/${command.name}.js`)
+                let customTimer = require(`../../commands/${command.name}.js`)
                 if (customTimer) {
                     return this.getIntervals()[id - 1].refreshTimer(command);
                 }
