@@ -1,6 +1,7 @@
 require('dotenv').config()
 import cors from 'cors';
 import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser'
 import fs from 'fs'
 import https from 'https';
 import { Server } from "socket.io";
@@ -81,7 +82,8 @@ class ServerBot {
 
     public configuration() {
         this.app.set('port', process.env.PORT || 3000);
-        this.app.use(express.json())
+        // this.app.use(express.json({ limit: '50mb' }))
+        this.app.use(bodyParser.json({ limit: '50mb' }));
         this.app.use(cors())
     }
 
