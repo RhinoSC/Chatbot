@@ -37,19 +37,19 @@ export class BidController {
     public create = async (req: Request, res: Response) => {
         const bid = req['body'].bid as Bid;
         const newBid = await this.bidService.create(bid);
-        res.status(201).json(newBid)
+        res.json(newBid)
         // res.send('si');
     }
 
     public update = async (req: Request, res: Response) => {
         const bid = req['body'].bid as Bid;
         const id = req['params']['id'];
-        res.status(201).json(await this.bidService.update(id, bid));
+        res.json(await this.bidService.update(id, bid));
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.status(200).json(await this.bidService.delete(id));
+        res.json(await this.bidService.delete(id));
     }
 
     public routes() {

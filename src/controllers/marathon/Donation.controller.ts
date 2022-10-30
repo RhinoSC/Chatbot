@@ -62,7 +62,7 @@ export class DonationController {
             this.updateBidTypeTotal()
         }
 
-        res.status(201).json(newDonation)
+        res.json(newDonation)
     }
 
     public update = async (req: Request, res: Response) => {
@@ -83,7 +83,7 @@ export class DonationController {
             this.eventService.update(event[0]._id, event[0])
         }
 
-        res.status(201).json(updatedDonation);
+        res.json(updatedDonation);
     }
 
     public delete = async (req: Request, res: Response) => {
@@ -103,7 +103,7 @@ export class DonationController {
 
         const numDeleted = await this.donationService.delete(id)
 
-        res.status(200).json({ deletedDonation: donation, num: numDeleted });
+        res.json({ deletedDonation: donation, num: numDeleted });
     }
 
     public routes() {

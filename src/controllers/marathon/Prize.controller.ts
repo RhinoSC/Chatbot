@@ -44,7 +44,7 @@ export class PrizeController {
 
         await this.eventService.update(event[0]._id, event[0])
 
-        res.status(201).json(newPrize)
+        res.json(newPrize)
     }
 
     public update = async (req: Request, res: Response) => {
@@ -65,7 +65,7 @@ export class PrizeController {
 
         await this.eventService.update(event[0]._id, event[0])
 
-        res.status(201).json(updatedPrize);
+        res.json(updatedPrize);
     }
 
     public delete = async (req: Request, res: Response) => {
@@ -83,7 +83,7 @@ export class PrizeController {
 
         const numDeleted = await this.prizeService.delete(id)
 
-        res.status(200).json({ deletedPrize: oldPrize, num: numDeleted });
+        res.json({ deletedPrize: oldPrize, num: numDeleted });
     }
 
     public routes() {

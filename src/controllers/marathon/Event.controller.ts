@@ -42,27 +42,20 @@ export class EventController {
                 amount += Number(donation.amount)
         })
         // console.log(amount)
-        res.status(201).json({ totalAmount: amount, amount: event[0].isCharityData.totalDonated })
+        res.json({ totalAmount: amount, amount: event[0].isCharityData.totalDonated })
     }
 
     public indexName = async (req: Request, res: Response) => {
         const name = req['params']['name'];
         const event = await this.eventService.findByName(name)
         console.log(event);
-        try {
-            console.log('enviar a layout')
-            await nodecg.axios.post('/sre9/update-event', { event: event[0] })
-        } catch (error) {
-            console.error(error, 'Error sending to nodecg the event')
-        }
         res.json(event);
     }
 
     public create = async (req: Request, res: Response) => {
         const event = req['body'].event as Event;
         const newEvent = await this.eventService.create(event);
-        res.status(201).json(newEvent)
-        // res.send('si');
+        res.json(newEvent)
     }
 
     public update = async (req: Request, res: Response) => {
@@ -70,22 +63,32 @@ export class EventController {
         const id = req['params']['id'];
 
         const updatedEvent = await this.eventService.update(id, event)
-        // try {
-        //     await nodecg.axios.post('/sre9/update-event', { event: updatedEvent })
-        // } catch (error) {
-        //     console.error(error, 'Error sendind to nodecg the event')
-        // }
-        res.status(201).json(updatedEvent);
+        res.json(updatedEvent);
     }
 
     public delete = async (req: Request, res: Response) => {
         const id = req['params']['id'];
-        res.status(200).json(await this.eventService.delete(id));
+        res.json(await this.eventService.delete(id));
+    }
+
+    public updateLayout = async (req: Request, res: Response) => {
+        const name = req['params']['name'];
+        const event = await this.eventService.findByName(name)
+        console.log(event);
+        try {
+            console.log('enviar a layout')
+            await nodecg.axios.post('/sre9/update-event', { event: event[0] })
+            res.json({ message: 'TI C:' })
+        } catch (error) {
+            console.error(error, 'Error sending to nodecg the event')
+        }
+        res.json({ message: 'Error sending to nodecg the event' })
     }
 
     public routes() {
         this.router.get('/all', this.index);
         this.router.get('/name/:name', this.indexName);
+        this.router.get('/layout', this.updateLayout);
         this.router.get('/one/:id', this.indexId);
         this.router.get('/one/:id/total-donated', this.getTotalDonationMount);
         this.router.use(checkJwt);
