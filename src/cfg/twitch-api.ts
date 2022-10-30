@@ -77,6 +77,14 @@ export class twitchAPI {
     }
 
     public async getGame(name: string) {
+        try {
+            let resp = await this.validateToken()
+            if (!resp) {
+                throw new Error('No response while validating token');
+            }
+        } catch (error) {
+            await this.refreshToken();
+        }
         let response = await this.API.get('games', { params: { name: name } })
         return response.data;
     }
@@ -87,16 +95,40 @@ export class twitchAPI {
     }
 
     public async setStream(title: string, id: number) {
+        try {
+            let resp = await this.validateToken()
+            if (!resp) {
+                throw new Error('No response while validating token');
+            }
+        } catch (error) {
+            await this.refreshToken();
+        }
         let response = await this.patchRequest(`channels?broadcaster_id=${process.env.CHANNEL_ID}`, { title: title, game_id: id })
         return response.status;
     }
 
     public async setTitle(title: string) {
+        try {
+            let resp = await this.validateToken()
+            if (!resp) {
+                throw new Error('No response while validating token');
+            }
+        } catch (error) {
+            await this.refreshToken();
+        }
         let response = await this.patchRequest(`channels?broadcaster_id=${process.env.CHANNEL_ID}`, { title: title })
         return response.status;
     }
 
     public async setGame(id: number) {
+        try {
+            let resp = await this.validateToken()
+            if (!resp) {
+                throw new Error('No response while validating token');
+            }
+        } catch (error) {
+            await this.refreshToken();
+        }
         let response = await this.patchRequest(`channels?broadcaster_id=${process.env.CHANNEL_ID}`, { game_id: id })
         return response.status;
     }
