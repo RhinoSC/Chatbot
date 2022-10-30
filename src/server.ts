@@ -84,6 +84,7 @@ class ServerBot {
         this.app.set('port', process.env.PORT || 3000);
         // this.app.use(express.json({ limit: '50mb' }))
         this.app.use(bodyParser.json({ limit: '50mb' }));
+        this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
         this.app.use(cors())
     }
 
