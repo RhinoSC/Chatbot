@@ -72,8 +72,7 @@ export class EventController {
     }
 
     public updateLayout = async (req: Request, res: Response) => {
-        const name = req['params']['name'];
-        const event = await this.eventService.findByName(name)
+        const event = await this.eventService.findByName('sre9')
         console.log(event);
         try {
             console.log('enviar a layout')
@@ -81,8 +80,8 @@ export class EventController {
             res.json({ message: 'TI C:' })
         } catch (error) {
             console.error(error, 'Error sending to nodecg the event')
+            // res.json({ message: 'Error sending to nodecg the event' })
         }
-        res.json({ message: 'Error sending to nodecg the event' })
     }
 
     public routes() {
