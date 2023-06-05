@@ -111,7 +111,11 @@ class ServerBot {
         // this.app.use(speedLimiter)
 
         let store = new ExpressBrute.MemoryStore()
-        let bruteforce = new ExpressBrute(store)
+        let bruteforce = new ExpressBrute(store, {
+            freeRetries: 20,
+            minWait: 5 * 1000,
+            maxWait: 10 * 1000
+        })
 
         this.app.use(bruteforce.prevent)
     }
