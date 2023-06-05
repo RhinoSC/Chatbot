@@ -93,31 +93,31 @@ class ServerBot {
         this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
         this.app.use(cors())
 
-        // const limiter = rateLimit({
-        //     windowMs: 5 * 60 * 1000,
-        //     max: 109,
-        //     standardHeaders: true,
-        //     legacyHeaders: false
-        // })
-
-        // this.app.use(limiter)
-
-        // const speedLimiter = slowDown({
-        //     windowMs: 5 * 60 * 1000,
-        //     delayAfter: 100,
-        //     delayMs: 500
-        // })
-
-        // this.app.use(speedLimiter)
-
-        let store = new ExpressBrute.MemoryStore()
-        let bruteforce = new ExpressBrute(store, {
-            freeRetries: 20,
-            minWait: 5 * 1000,
-            maxWait: 10 * 1000
+        const limiter = rateLimit({
+            windowMs: 20 * 1000,
+            max: 109,
+            standardHeaders: true,
+            legacyHeaders: false
         })
 
-        this.app.use(bruteforce.prevent)
+        this.app.use(limiter)
+
+        const speedLimiter = slowDown({
+            windowMs: 20 * 1000,
+            delayAfter: 100,
+            delayMs: 500
+        })
+
+        this.app.use(speedLimiter)
+
+        // let store = new ExpressBrute.MemoryStore()
+        // let bruteforce = new ExpressBrute(store, {
+        //     freeRetries: 20,
+        //     minWait: 5 * 1000,
+        //     maxWait: 10 * 1000
+        // })
+
+        // this.app.use(bruteforce.prevent)
     }
 
     public routes() {
