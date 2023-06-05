@@ -7,6 +7,11 @@ import https from 'https';
 import { Server } from "socket.io";
 import socketContext from './cfg/socket-context';
 
+import rateLimit from 'express-rate-limit'
+import ExpressBrute from 'express-brute'
+import slowDown from 'express-slow-down'
+
+
 import { DB } from './cfg/db/chat/db';
 import { horaroAPI } from './cfg/horaro-api';
 import { TmiChat } from './cfg/tmi-client';
@@ -81,11 +86,34 @@ class ServerBot {
     }
 
     public configuration() {
+
         this.app.set('port', process.env.PORT || 3000);
         // this.app.use(express.json({ limit: '50mb' }))
         this.app.use(bodyParser.json({ limit: '50mb' }));
         this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
         this.app.use(cors())
+
+        // const limiter = rateLimit({
+        //     windowMs: 5 * 60 * 1000,
+        //     max: 109,
+        //     standardHeaders: true,
+        //     legacyHeaders: false
+        // })
+
+        // this.app.use(limiter)
+
+        // const speedLimiter = slowDown({
+        //     windowMs: 5 * 60 * 1000,
+        //     delayAfter: 100,
+        //     delayMs: 500
+        // })
+
+        // this.app.use(speedLimiter)
+
+        let store = new ExpressBrute.MemoryStore()
+        let bruteforce = new ExpressBrute(store)
+
+        this.app.use(bruteforce.prevent)
     }
 
     public routes() {
@@ -98,15 +126,24 @@ class ServerBot {
         this.app.use('/api/horaro/', this.controllers.horaroController.router);
 
 
+
+
         // marathon
         this.app.use('/api/tracker/bid/', this.controllers.bidController.router);
         this.app.use('/api/tracker/donation/', this.controllers.donationController.router);
+        // this.app.use('/api/tracker/event/', bruteforce.prevent, this.controllers.eventController.router);
         this.app.use('/api/tracker/event/', this.controllers.eventController.router);
         this.app.use('/api/tracker/prize/', this.controllers.prizeController.router);
         this.app.use('/api/tracker/run/', this.controllers.runController.router);
         this.app.use('/api/tracker/schedule/', this.controllers.scheduleController.router);
         this.app.use('/api/tracker/team/', this.controllers.teamController.router);
         this.app.use('/api/tracker/user/', this.controllers.userController.router);
+
+
+        // this.app.get("/", bruteforce.prevent, (req: Request, res: Response) => {
+        //     res.send('Hello world!');
+        // })
+
         this.app.get("/", (req: Request, res: Response) => {
             res.send('Hello world!');
         })
@@ -145,7 +182,7 @@ class ServerBot {
 
         socketContext.set(io);
 
-        this.tmi.start()
+        // this.tmi.start()
     }
 
 }
