@@ -125,8 +125,8 @@ class ServerBot {
         }),
             {
                 cors: {
-                    origin: "*",
-                    // origin: ["http://localhost:8080", "http://localhost:9090"],
+                    // origin: "*",
+                    origin: ["http://localhost:8080", "http://localhost:9090"],
                     methods: ["GET", "POST", "PUT", "DELETE"],
                     credentials: true
                 },
@@ -141,7 +141,7 @@ class ServerBot {
 
         socketContext.set(io);
 
-        this.tmi.start()
+        // this.tmi.start()
     }
 
 }

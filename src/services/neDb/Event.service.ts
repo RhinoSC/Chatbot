@@ -41,7 +41,7 @@ export class EventService {
 
         try {
             console.log('enviar a layout')
-            await nodecg.axios.post('/sre9/update-event', { event: updateEvent })
+            await nodecg.axios.post('/sre-event/update-event', { event: updateEvent })
         } catch (error) {
             console.error(error, 'Error sending to nodecg the event')
         }

@@ -75,8 +75,8 @@ export class EventController {
         const event = await this.eventService.findByName('sre9')
         console.log(event);
         try {
-            console.log('enviar a layout')
-            await nodecg.axios.post('/sre9/update-event', { event: event[0] })
+            console.log('enviar a layout ', nodecg.axios.defaults.baseURL)
+            await nodecg.axios.post('/sre-event/update-event', { event: event[0] })
             res.json({ message: 'TI C:' })
         } catch (error) {
             console.error(error, 'Error sending to nodecg the event')
